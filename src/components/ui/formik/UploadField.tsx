@@ -80,7 +80,7 @@ const UploadField: React.FC<UploadFieldProps> = ({
         onReadStarted={() => setIsFileUploading(true)}
         onReadFinished={() => setIsFileUploading(false)}
         isLoading={isFileUploading}
-        disabled={isDisabled}
+        isDisabled={isDisabled}
         dropzoneProps={{
           ...dropzoneProps,
           onDropRejected: dropzoneProps?.onDropRejected && dropzoneProps?.onDropRejected(helpers),

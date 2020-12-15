@@ -47,7 +47,14 @@ export interface TextAreaFieldProps extends FieldProps {
   getErrorText?: (error: string) => React.ReactNode | undefined;
   placeholder?: string;
   onChange?: (event: React.FormEvent<HTMLTextAreaElement>) => void;
-  onBlur?: () => void;
+  onBlur?: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
+}
+
+export interface UploadFieldProps extends FieldProps {
+  getErrorText?: (error: string) => React.ReactNode | undefined;
+  placeholder?: string;
+  onChange?: (event: React.FormEvent<HTMLTextAreaElement>) => void;
+  onBlur?: (event: React.FormEvent<HTMLDivElement>) => void;
 }
 
 export interface UploadFieldProps extends FieldProps {
