@@ -1,5 +1,5 @@
 import React from 'react';
-import { EventList, Event } from '../../api/types';
+import { EventList, Event, HostList } from '../../api/types';
 import { Label } from '@patternfly/react-core';
 import { TableVariant, Table, TableBody, breakWord } from '@patternfly/react-table';
 import {
@@ -12,6 +12,9 @@ import { ExtraParamsType } from '@patternfly/react-table/dist/js/components/Tabl
 import { fitContent, noPadding } from '../ui/table/wrappable';
 import { getHumanizedDateTime } from './utils';
 import { EmptyState } from './uiState';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/rootReducer';
+import { findHostname } from '../hosts/utils';
 
 const getEventRowKey = ({ rowData }: ExtraParamsType) =>
   rowData?.props?.event.sortableTime + rowData?.props?.event.message;
@@ -46,6 +49,8 @@ export type EventsListProps = {
 };
 
 const EventsList: React.FC<EventsListProps> = ({ events }) => {
+  const hosts = useSelector<RootState, HostList>((state) => state.currentCluster.data?.hosts || []);
+
   if (events.length === 0) {
     return (
       <EmptyState icon={SearchIcon} title="No events found" content="There are no events found." />
@@ -63,28 +68,32 @@ const EventsList: React.FC<EventsListProps> = ({ events }) => {
       (a, b) => b.sortableTime - a.sortableTime,
     );
 
-  const rows = sortedEvents.map((event) => ({
-    cells: [
-      {
-        title: <strong>{getHumanizedDateTime(event.eventTime)}</strong>,
-      },
-      {
-        title: (
-          <>
-            {event.severity !== 'info' && (
-              <>
-                <Label color={getLabelColor(event.severity)} icon={getLabelIcon(event.severity)}>
-                  {event.severity}
-                </Label>{' '}
-              </>
-            )}
-            {event.message}
-          </>
-        ),
-      },
-    ],
-    props: { event },
-  }));
+  const rows = sortedEvents.map((event) => {
+    const hostname = event.hostId ? findHostname(event.hostId, hosts) : null;
+
+    return {
+      cells: [
+        {
+          title: <strong>{getHumanizedDateTime(event.eventTime)}</strong>,
+        },
+        {
+          title: (
+            <>
+              {event.severity !== 'info' && (
+                <>
+                  <Label color={getLabelColor(event.severity)} icon={getLabelIcon(event.severity)}>
+                    {event.severity}
+                  </Label>{' '}
+                </>
+              )}
+              {hostname ? `Host ${hostname}: ${event.message}` : event.message}
+            </>
+          ),
+        },
+      ],
+      props: { event },
+    };
+  });
 
   return (
     <Table

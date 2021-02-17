@@ -137,6 +137,12 @@ export const getEnabledHosts = (hosts: Host[] = []) =>
 export const getHostname = (host: Host, inventory: Inventory) =>
   host.requestedHostname || inventory.hostname;
 
+export const findHostname = (hostId: string, hosts: Host[] = []): string => {
+  const host = hosts.find(({ id }) => id === hostId);
+
+  return host?.requestedHostname || hostId;
+};
+
 export const getHardwareTypeText = (inventory: Inventory) => {
   let hardwareTypeText = DASH;
   const { systemVendor } = inventory;
