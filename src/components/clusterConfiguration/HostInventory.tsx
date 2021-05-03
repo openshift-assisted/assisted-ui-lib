@@ -31,12 +31,13 @@ const HostRequirementsContent = () => {
   const masterRam = fileSize((master?.ramMib || 16 * 1024) * 1024 * 1024, 2, 'iec');
   const workerRam = fileSize((worker?.ramMib || 8 * 1024) * 1024 * 1024, 2, 'iec');
 
+  // TODO(mlibra): this needs rephrasing to bullets, etc.
   return (
     <Text component="p">
-      Three master hosts are required with at least {master?.cpuCores || 4} CPU cores, {masterRam}{' '}
-      of RAM, and {master?.diskSizeGb || 120} GB of filesystem storage each. Two or more additional
-      worker hosts are recommended with at least {worker?.cpuCores || 2} CPU cores, {workerRam} of
-      RAM, and {worker?.diskSizeGb || 120} GB of filesystem storage each.
+      Three supervisor hosts are required with at least {master?.cpuCores || 4} CPU cores,{' '}
+      {masterRam} of RAM, and {master?.diskSizeGb || 120} GB of filesystem storage each. Two or more
+      additional worker hosts are recommended with at least {worker?.cpuCores || 2} CPU cores,{' '}
+      {workerRam} of RAM, and {worker?.diskSizeGb || 120} GB of filesystem storage each.
     </Text>
   );
 };
@@ -77,32 +78,33 @@ const CNVLabel: React.FC = () => {
     <>
       Install OpenShift Virtualization{' '}
       <PopoverIcon
-        headerContent="Additional Requirements"
+        headerContent="Additional requirements for OpenShift Virtualization"
         className="margin-left-md"
         hasAutoWidth
         maxWidth="50rem"
         bodyContent={
           <TextContent>
-            <Text></Text>
             <List>
               <ListItem>
-                enabled CPU virtualization support in BIOS (Intel-VT / AMD-V) on all worker nodes
+                Enabled CPU virtualization support in BIOS (Intel-VT / AMD-V) on all worker nodes.
               </ListItem>
               <ListItem>
-                worker node requires additional {workerRequirements?.ramMib || 360} MiB of memory{' '}
-                {workerRequirements?.diskSizeGb ? ',' : ' and'} {workerRequirements?.cpuCores || 2}{' '}
-                CPUs
+                Each worker node requires an additional {workerRequirements?.ramMib || 360} MiB of
+                memory {workerRequirements?.diskSizeGb ? ',' : ' and'}{' '}
+                {workerRequirements?.cpuCores || 2} CPUs
                 {workerRequirements?.diskSizeGb
                   ? ` and ${workerRequirements?.diskSizeGb} storage space`
                   : ''}
+                .
               </ListItem>
               <ListItem>
-                master node requires additional {masterRequirements?.ramMib || 150} MiB of memory{' '}
-                {masterRequirements?.diskSizeGb ? ',' : ' and'} {masterRequirements?.cpuCores || 4}{' '}
-                CPUs
+                Each supervisor node requires an additional {masterRequirements?.ramMib || 150} MiB
+                of memory {masterRequirements?.diskSizeGb ? ',' : ' and'}{' '}
+                {masterRequirements?.cpuCores || 4} CPUs
                 {masterRequirements?.diskSizeGb
                   ? ` and ${masterRequirements?.diskSizeGb} storage space`
                   : ''}
+                .
               </ListItem>
               {/* TODO(mlibra): Wording of storage requirements needs special care - https://issues.redhat.com/browse/MGMT-5284
               <ListItem>either Cluster or Local Storage (the LSO operator will be added by default)</ListItem>
