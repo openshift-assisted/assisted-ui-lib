@@ -1,27 +1,27 @@
 import React from 'react';
-import { Cluster, Inventory } from '../../api/types';
-import { ClusterHostsTable } from '.';
+import { Cluster } from '../../api/types';
+import ClusterHostsTable, { ClusterHostsTableProps } from './ClusterHostsTable';
 import { HostDetail } from './HostRowDetail';
 import HostPropertyValidationPopover from './HostPropertyValidationPopover';
-import { HostsTableProps } from './HostsTable';
 import { stringToJSON } from '../../api/utils';
 import { getHostRowHardwareInfo } from './hardwareInfo';
 import { ValidationsInfo } from '../../types/hosts';
-import { getHostname, getHostRole } from './utils';
+import { canEditDisks, getHostname, getHostRole, getInventory } from './utils';
 import Hostname from './Hostname';
 import RoleCell from './RoleCell';
 import HardwareStatus from './HardwareStatus';
 import { getDateTimeCell } from '../ui/table/utils';
 import { HostsNotShowingLinkProps } from '../clusterConfiguration/DiscoveryTroubleshootingModal';
 
-const hostToHostTableRow: HostsTableProps['hostToHostTableRow'] = (
+const hostToHostTableRow: ClusterHostsTableProps['hostToHostTableRow'] = (
+  host,
   openRows,
-  canEditDisks,
+  cluster,
   onEditHostname,
   canEditRole,
-) => (host) => {
-  const { id, status, createdAt, inventory: inventoryString = '' } = host;
-  const inventory = stringToJSON<Inventory>(inventoryString) || {};
+) => {
+  const { id, status, createdAt } = host;
+  const inventory = getInventory(host);
   const { cores, memory, disk } = getHostRowHardwareInfo(inventory);
   const validationsInfo = stringToJSON<ValidationsInfo>(host.validationsInfo) || {};
   const memoryValidation = validationsInfo?.hardware?.find((v) => v.id === 'has-memory-for-role');
@@ -29,11 +29,11 @@ const hostToHostTableRow: HostsTableProps['hostToHostTableRow'] = (
   const cpuCoresValidation = validationsInfo?.hardware?.find(
     (v) => v.id === 'has-cpu-cores-for-role',
   );
-  const computedHostname = getHostname(host, inventory);
+  const computedHostname = getHostname(host);
   const hostRole = getHostRole(host);
   const dateTimeCell = getDateTimeCell(createdAt);
 
-  const editHostname = onEditHostname ? () => onEditHostname(host, inventory) : undefined;
+  const editHostname = onEditHostname ? () => onEditHostname(host) : undefined;
 
   return [
     {
@@ -41,7 +41,7 @@ const hostToHostTableRow: HostsTableProps['hostToHostTableRow'] = (
       isOpen: !!openRows[id],
       cells: [
         {
-          title: <Hostname host={host} inventory={inventory} onEditHostname={editHostname} />,
+          title: <Hostname host={host} onEditHostname={editHostname} />,
           props: { 'data-testid': 'host-name' },
           sortableValue: computedHostname || '',
         },
@@ -95,7 +95,6 @@ const hostToHostTableRow: HostsTableProps['hostToHostTableRow'] = (
         },
       ],
       host,
-      inventory,
       key: `${host.id}-master`,
     },
     {
@@ -107,7 +106,7 @@ const hostToHostTableRow: HostsTableProps['hostToHostTableRow'] = (
           title: (
             <HostDetail
               key={id}
-              canEditDisks={canEditDisks}
+              canEditDisks={() => canEditDisks(cluster.status, host.status)}
               inventory={inventory}
               host={host}
               validationsInfo={validationsInfo}
@@ -115,8 +114,8 @@ const hostToHostTableRow: HostsTableProps['hostToHostTableRow'] = (
           ),
         },
       ],
+      host,
       key: `${host.id}-detail`,
-      inventory,
     },
   ];
 };

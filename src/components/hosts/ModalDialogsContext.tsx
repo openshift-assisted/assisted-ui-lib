@@ -1,10 +1,11 @@
 import React from 'react';
-import { Host, Inventory, Cluster } from '../../api/types';
+import { Host, Cluster } from '../../api/types';
 import {
   dialogsReducer,
   openDialog as openDialogAction,
   closeDialog as closeDialogAction,
 } from '../../reducers/dialogs';
+import { HostUpdateParams } from './EditHostForm';
 
 type HostIdAndHostname = {
   hostId: Host['id'];
@@ -13,7 +14,9 @@ type HostIdAndHostname = {
 
 type EditHostProps = {
   host: Host;
-  inventory: Inventory;
+  usedHostnames: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onSave: (values: HostUpdateParams) => Promise<any>;
 };
 
 type ResetClusterProps = {

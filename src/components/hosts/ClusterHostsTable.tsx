@@ -1,4 +1,4 @@
-import { expandable, ICell, IRowData, sortable } from '@patternfly/react-table';
+import { expandable, ICell, IRow, sortable } from '@patternfly/react-table';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import {
@@ -12,9 +12,9 @@ import {
   Host,
   HostRoleUpdateParams,
   installHost,
-  Inventory,
   patchCluster,
   resetClusterHost,
+  stringToJSON,
 } from '../../api';
 import { forceReload, updateCluster, updateHost } from '../../reducers/clusters';
 import { WithTestID } from '../../types';
@@ -23,23 +23,36 @@ import {
   HostsNotShowingLink,
   HostsNotShowingLinkProps,
 } from '../clusterConfiguration/DiscoveryTroubleshootingModal';
-import HostsTable, { HostsTableProps } from './HostsTable';
+import HostsTable, { OpenRows } from './HostsTable';
 import { useModalDialogsContext } from './ModalDialogsContext';
 import { EmptyState } from '../ui/uiState';
 import { ConnectedIcon } from '@patternfly/react-icons';
 import { DiscoveryImageModalButton } from '../clusterConfiguration/discoveryImageModal';
 import {
-  canEditDisks as canEditDisksUtil,
-  canEditRole as canEditRoleUtil,
-  canInstallHost as canInstallHostUtil,
+  canEditDisks,
+  canEditRole,
+  canInstallHost,
   downloadHostInstallationLogs,
-  canEnable as canEnableUtil,
-  canDisable as canDisableUtil,
-  canDelete as canDeleteUtil,
-  canEditHost as canEditHostUtil,
+  canEnable,
+  canDisable,
+  canDelete,
+  canEditHost,
   canDownloadHostLogs,
-  canReset as canResetUtil,
+  canReset,
+  getHostname,
+  getHostRole,
+  getInventory,
 } from './utils';
+import {
+  installHost as installHostAction,
+  editHost,
+  enableHost,
+  disableHost,
+  resetHost,
+  viewHostEvents,
+  downloadHostLogs,
+  deleteHost,
+} from './HostsTableActions';
 import EditHostModal from './EditHostModal';
 import { EventsModal } from '../ui/eventsModal';
 import ResetHostModal from './ResetHostModal';
@@ -47,36 +60,141 @@ import DeleteHostModal from './DeleteHostModal';
 import { AdditionalNTPSourcesDialog } from './AdditionalNTPSourcesDialog';
 import HostsCount from './HostsCount';
 import { HostUpdateParams } from './EditHostForm';
+import { getDateTimeCell } from '../ui/table/utils';
+import Hostname from './Hostname';
+import RoleCell from './RoleCell';
+import HostStatus from './HostStatus';
+import HostPropertyValidationPopover from './HostPropertyValidationPopover';
+import { HostDetail } from './HostRowDetail';
+import { ValidationsInfo } from '../../types/hosts';
+import { getHostRowHardwareInfo } from './hardwareInfo';
 
-type HostsTableEmptyStateProps = {
-  cluster: Cluster;
-  setDiscoveryHintModalOpen?: HostsNotShowingLinkProps['setDiscoveryHintModalOpen'];
+const defaultHostToHostTableRow: ClusterHostsTableProps['hostToHostTableRow'] = (
+  host,
+  openRows,
+  cluster,
+  onEditHostname,
+  onEditRole,
+) => {
+  const { id, status, createdAt } = host;
+  const inventory = getInventory(host);
+  const { cores, memory, disk } = getHostRowHardwareInfo(inventory);
+  const validationsInfo = stringToJSON<ValidationsInfo>(host.validationsInfo) || {};
+  const memoryValidation = validationsInfo?.hardware?.find((v) => v.id === 'has-memory-for-role');
+  const diskValidation = validationsInfo?.hardware?.find((v) => v.id === 'has-min-valid-disks');
+  const cpuCoresValidation = validationsInfo?.hardware?.find(
+    (v) => v.id === 'has-cpu-cores-for-role',
+  );
+  const computedHostname = getHostname(host);
+  const hostRole = getHostRole(host);
+  const dateTimeCell = getDateTimeCell(createdAt);
+
+  const editHostname = onEditHostname ? () => onEditHostname(host) : undefined;
+  const editRole = onEditRole ? (role?: string) => onEditRole(host, role) : undefined;
+
+  return [
+    {
+      // visible row
+      isOpen: !!openRows[id],
+      cells: [
+        {
+          title: <Hostname host={host} onEditHostname={editHostname} />,
+          props: { 'data-testid': 'host-name' },
+          sortableValue: computedHostname || '',
+        },
+        {
+          title: (
+            <RoleCell
+              host={host}
+              readonly={!canEditRole(cluster, host.status)}
+              role={hostRole}
+              onEditRole={editRole}
+            />
+          ),
+          props: { 'data-testid': 'host-role' },
+          sortableValue: hostRole,
+        },
+        {
+          title: (
+            <HostStatus
+              host={host}
+              onEditHostname={editHostname}
+              validationsInfo={validationsInfo}
+            />
+          ),
+          props: { 'data-testid': 'host-status' },
+          sortableValue: status,
+        },
+        {
+          title: dateTimeCell.title,
+          props: { 'data-testid': 'host-discovered-time' },
+          sortableValue: dateTimeCell.sortableValue,
+        },
+        {
+          title: (
+            <HostPropertyValidationPopover validation={cpuCoresValidation}>
+              {cores.title}
+            </HostPropertyValidationPopover>
+          ),
+          props: { 'data-testid': 'host-cpu-cores' },
+          sortableValue: cores.sortableValue,
+        },
+        {
+          title: (
+            <HostPropertyValidationPopover validation={memoryValidation}>
+              {memory.title}
+            </HostPropertyValidationPopover>
+          ),
+          props: { 'data-testid': 'host-memory' },
+          sortableValue: memory.sortableValue,
+        },
+        {
+          title: (
+            <HostPropertyValidationPopover validation={diskValidation}>
+              {disk.title}
+            </HostPropertyValidationPopover>
+          ),
+          props: { 'data-testid': 'host-disks' },
+          sortableValue: disk.sortableValue,
+        },
+      ],
+      host,
+      key: `${host.id}-master`,
+    },
+    {
+      // expandable detail
+      // parent will be set after sorting
+      fullWidth: true,
+      cells: [
+        {
+          title: (
+            <HostDetail
+              key={id}
+              canEditDisks={() => canEditDisks(cluster.status, host.status)}
+              inventory={inventory}
+              host={host}
+              validationsInfo={validationsInfo}
+            />
+          ),
+        },
+      ],
+      host,
+      key: `${host.id}-detail`,
+    },
+  ];
 };
 
-const HostsTableEmptyState: React.FC<HostsTableEmptyStateProps> = ({
-  cluster,
-  setDiscoveryHintModalOpen,
-}) => (
-  <EmptyState
-    icon={ConnectedIcon}
-    title="Waiting for hosts..."
-    content="Hosts may take a few minutes to appear here after booting."
-    primaryAction={<DiscoveryImageModalButton cluster={cluster} idPrefix="host-table-empty" />}
-    secondaryActions={
-      setDiscoveryHintModalOpen && [
-        <HostsNotShowingLink
-          key="hosts-not-showing"
-          setDiscoveryHintModalOpen={setDiscoveryHintModalOpen}
-        />,
-      ]
-    }
-  />
-);
-
-type ClusterHostsTableProps = {
+export type ClusterHostsTableProps = {
   cluster: Cluster;
   columns?: (string | ICell)[];
-  hostToHostTableRow?: HostsTableProps['hostToHostTableRow'];
+  hostToHostTableRow?: (
+    host: Host,
+    openRows: OpenRows,
+    cluster: Cluster,
+    onEditHostname: (host: Host) => void,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onEditRole: (host: Host, role?: string) => Promise<any>,
+  ) => (IRow & { host: Host })[];
   skipDisabled?: boolean;
   setDiscoveryHintModalOpen?: HostsNotShowingLinkProps['setDiscoveryHintModalOpen'];
 };
@@ -86,8 +204,11 @@ const ClusterHostsTable: React.FC<ClusterHostsTableProps & WithTestID> = ({
   cluster,
   setDiscoveryHintModalOpen,
   hostToHostTableRow,
-  ...rest
+  skipDisabled,
 }) => {
+  const usedHostnames = cluster?.hosts
+    ?.map((h) => h.requestedHostname)
+    .filter((h) => h) as string[];
   const { addAlert } = React.useContext(AlertsContext);
   const {
     eventsDialog,
@@ -98,93 +219,28 @@ const ClusterHostsTable: React.FC<ClusterHostsTableProps & WithTestID> = ({
   } = useModalDialogsContext();
   const dispatch = useDispatch();
 
-  const hostActions = React.useMemo(
-    () => ({
-      onDeleteHost: (event: React.MouseEvent, rowIndex: number, rowData: IRowData) =>
-        deleteHostDialog.open({
-          hostId: rowData.host.id,
-          hostname: rowData.host?.requestedHostname || rowData.inventory?.hostname,
-        }),
-      onHostEnable: async (event: React.MouseEvent, rowIndex: number, rowData: IRowData) => {
-        const hostId = rowData.host.id;
-        try {
-          const { data } = await enableClusterHost(cluster.id, hostId);
-          dispatch(updateCluster(data));
-        } catch (e) {
-          handleApiError(e, () =>
-            addAlert({ title: `Failed to enable host ${hostId}`, message: getErrorMessage(e) }),
-          );
-        }
-      },
-      onInstallHost: async (event: React.MouseEvent, rowIndex: number, rowData: IRowData) => {
-        const hostId = rowData.host.id;
-        try {
-          const { data } = await installHost(cluster.id, hostId);
-          dispatch(updateHost(data));
-        } catch (e) {
-          handleApiError(e, () =>
-            addAlert({ title: `Failed to enable host ${hostId}`, message: getErrorMessage(e) }),
-          );
-        }
-      },
-      onHostDisable: async (event: React.MouseEvent, rowIndex: number, rowData: IRowData) => {
-        const hostId = rowData.host.id;
-        try {
-          const { data } = await disableClusterHost(cluster.id, hostId);
-          dispatch(updateCluster(data));
-        } catch (e) {
-          handleApiError(e, () =>
-            addAlert({ title: `Failed to disable host ${hostId}`, message: getErrorMessage(e) }),
-          );
-        }
-      },
-    }),
-    [cluster.id, dispatch, addAlert, deleteHostDialog],
-  );
-
-  const onViewHostEvents = React.useCallback(
-    (event: React.MouseEvent, rowIndex: number, rowData: IRowData) => {
-      const host = rowData.host;
-      const { id, requestedHostname } = host;
-      const hostname = requestedHostname || rowData.inventory?.hostname || id;
-      eventsDialog.open({ hostId: id, hostname });
-    },
-    [eventsDialog],
-  );
-
-  const onEditHost = React.useCallback(
-    (host: Host, inventory: Inventory) => {
-      editHostDialog.open({ host, inventory });
-    },
-    [editHostDialog],
-  );
-
-  const onHostReset = React.useCallback(
-    (host: Host, inventory: Inventory) => {
-      const hostname = host?.requestedHostname || inventory?.hostname || '';
-      resetHostDialog.open({ hostId: host.id, hostname });
-    },
-    [resetHostDialog],
-  );
-
-  const onDownloadHostLogs = React.useCallback(
-    (event: React.MouseEvent, rowIndex: number, rowData: IRowData) =>
-      downloadHostInstallationLogs(addAlert, rowData.host),
-    [addAlert],
-  );
-
-  const EmptyState = React.useCallback(
+  const EmptyTableState = React.useCallback(
     () => (
-      <HostsTableEmptyState
-        cluster={cluster}
-        setDiscoveryHintModalOpen={setDiscoveryHintModalOpen}
+      <EmptyState
+        icon={ConnectedIcon}
+        title="Waiting for hosts..."
+        content="Hosts may take a few minutes to appear here after booting."
+        primaryAction={<DiscoveryImageModalButton cluster={cluster} idPrefix="host-table-empty" />}
+        secondaryActions={
+          setDiscoveryHintModalOpen && [
+            <HostsNotShowingLink
+              key="hosts-not-showing"
+              setDiscoveryHintModalOpen={setDiscoveryHintModalOpen}
+            />,
+          ]
+        }
       />
     ),
     [setDiscoveryHintModalOpen, cluster],
   );
 
-  const [tableColumns, actionChecks] = React.useMemo(
-    () => [
+  const tableColumns = React.useMemo(
+    () =>
       columns || [
         { title: 'Hostname', transforms: [sortable], cellFormatters: [expandable] },
         { title: 'Role', transforms: [sortable] },
@@ -195,17 +251,6 @@ const ClusterHostsTable: React.FC<ClusterHostsTableProps & WithTestID> = ({
         { title: 'Disk', transforms: [sortable] },
         { title: <HostsCount cluster={cluster} inParenthesis /> },
       ],
-      {
-        canEditRole: (host: Host) => canEditRoleUtil(cluster, host.status),
-        canInstallHost: (host: Host) => canInstallHostUtil(cluster, host.status),
-        canEditDisks: (host: Host) => canEditDisksUtil(cluster.status, host.status),
-        canEnable: (host: Host) => canEnableUtil(cluster.status, host.status),
-        canDisable: (host: Host) => canDisableUtil(cluster.status, host.status),
-        canDelete: (host: Host) => canDeleteUtil(cluster.status, host.status),
-        canEditHost: (host: Host) => canEditHostUtil(cluster.status, host.status),
-        canReset: (host: Host) => canResetUtil(cluster.status, host.status),
-      },
-    ],
     [cluster, columns],
   );
 
@@ -249,38 +294,157 @@ const ClusterHostsTable: React.FC<ClusterHostsTableProps & WithTestID> = ({
     deleteHostDialog.close();
   }, [addAlert, cluster.id, dispatch, deleteHostDialog]);
 
-  const onEditRole = React.useCallback(
-    async ({ id, clusterId }: Host, role?: string) => {
-      const params: ClusterUpdateParams = {};
-      params.hostsRoles = [{ id, role: role as HostRoleUpdateParams }];
-      try {
-        const { data } = await patchCluster(clusterId as string, params);
-        dispatch(updateCluster(data));
-      } catch (e) {
-        handleApiError(e, () =>
-          addAlert({ title: 'Failed to set role', message: getErrorMessage(e) }),
-        );
-      }
-    },
-    [addAlert, dispatch],
+  const tableRows = React.useCallback(
+    (host, openRows) =>
+      (hostToHostTableRow || defaultHostToHostTableRow)(
+        host,
+        openRows,
+        cluster,
+        (host: Host) =>
+          editHostDialog.open({
+            host,
+            usedHostnames,
+            onSave: async (values: HostUpdateParams) => {
+              const params: ClusterUpdateParams = {
+                hostsNames: [
+                  {
+                    id: values.hostId,
+                    hostname: values.hostname,
+                  },
+                ],
+              };
+
+              const { data } = await patchCluster(cluster.id, params);
+              dispatch(updateCluster(data));
+              editHostDialog.close();
+            },
+          }),
+        async ({ id, clusterId }: Host, role?: string) => {
+          const params: ClusterUpdateParams = {};
+          params.hostsRoles = [{ id, role: role as HostRoleUpdateParams }];
+          try {
+            const { data } = await patchCluster(clusterId as string, params);
+            dispatch(updateCluster(data));
+          } catch (e) {
+            handleApiError(e, () =>
+              addAlert({ title: 'Failed to set role', message: getErrorMessage(e) }),
+            );
+          }
+        },
+      ),
+    [hostToHostTableRow, addAlert, cluster, dispatch, editHostDialog, usedHostnames],
+  );
+
+  const actions = React.useMemo(
+    () => [
+      installHostAction(
+        async (host) => {
+          const hostId = host.id;
+          try {
+            const { data } = await installHost(cluster.id, hostId);
+            dispatch(updateHost(data));
+          } catch (e) {
+            handleApiError(e, () =>
+              addAlert({ title: `Failed to enable host ${hostId}`, message: getErrorMessage(e) }),
+            );
+          }
+        },
+        (host) => canInstallHost(cluster, host.status),
+      ),
+      editHost(
+        (host) => {
+          editHostDialog.open({
+            host,
+            usedHostnames,
+            onSave: async (values: HostUpdateParams) => {
+              const params: ClusterUpdateParams = {
+                hostsNames: [
+                  {
+                    id: values.hostId,
+                    hostname: values.hostname,
+                  },
+                ],
+              };
+              const { data } = await patchCluster(cluster.id, params);
+              dispatch(updateCluster(data));
+              editHostDialog.close();
+            },
+          });
+        },
+        (host) => canEditHost(cluster.status, host.status),
+      ),
+      enableHost(
+        async (host) => {
+          const hostId = host.id;
+          try {
+            const { data } = await enableClusterHost(cluster.id, hostId);
+            dispatch(updateCluster(data));
+          } catch (e) {
+            handleApiError(e, () =>
+              addAlert({ title: `Failed to enable host ${hostId}`, message: getErrorMessage(e) }),
+            );
+          }
+        },
+        (host) => canEnable(cluster.status, host.status),
+      ),
+      disableHost(
+        async (host) => {
+          const hostId = host.id;
+          try {
+            const { data } = await disableClusterHost(cluster.id, hostId);
+            dispatch(updateCluster(data));
+          } catch (e) {
+            handleApiError(e, () =>
+              addAlert({ title: `Failed to disable host ${hostId}`, message: getErrorMessage(e) }),
+            );
+          }
+        },
+        (host) => canDisable(cluster.status, host.status),
+      ),
+      resetHost(
+        (host) => {
+          const hostname = host?.requestedHostname || getInventory(host).hostname || '';
+          resetHostDialog.open({ hostId: host.id, hostname });
+        },
+        (host) => canReset(cluster.status, host.status),
+      ),
+      viewHostEvents((host) => {
+        const { id, requestedHostname } = host;
+        const hostname = requestedHostname || getInventory(host).hostname || id;
+        eventsDialog.open({ hostId: id, hostname });
+      }),
+      downloadHostLogs((host) => downloadHostInstallationLogs(addAlert, host), canDownloadHostLogs),
+      deleteHost(
+        (host) => {
+          deleteHostDialog.open({
+            hostId: host.id,
+            hostname: host?.requestedHostname || getInventory(host)?.hostname || '',
+          });
+        },
+        (host) => canDelete(cluster.status, host.status),
+      ),
+    ],
+    [
+      addAlert,
+      cluster,
+      dispatch,
+      editHostDialog,
+      deleteHostDialog,
+      eventsDialog,
+      resetHostDialog,
+      usedHostnames,
+    ],
   );
 
   return (
     <>
       <HostsTable
-        {...rest}
-        {...hostActions}
-        {...actionChecks}
+        skipDisabled={skipDisabled}
         columns={tableColumns}
         hosts={cluster.hosts}
-        EmptyState={EmptyState}
-        onHostReset={onHostReset}
-        onViewHostEvents={onViewHostEvents}
-        onEditHost={onEditHost}
-        onDownloadHostLogs={onDownloadHostLogs}
-        hostToHostTableRow={hostToHostTableRow}
-        canDownloadHostLogs={canDownloadHostLogs}
-        onEditRole={onEditRole}
+        EmptyState={EmptyTableState}
+        hostToHostTableRow={tableRows}
+        actions={actions}
       />
       <EventsModal
         title={`Host Events${eventsDialog.isOpen ? `: ${eventsDialog.data?.hostname}` : ''}`}
@@ -302,29 +466,7 @@ const ClusterHostsTable: React.FC<ClusterHostsTableProps & WithTestID> = ({
         isOpen={deleteHostDialog.isOpen}
         onDelete={onDelete}
       />
-      <EditHostModal
-        host={editHostDialog.data?.host}
-        inventory={editHostDialog.data?.inventory}
-        usedHostnames={
-          cluster?.hosts?.map((h) => h.requestedHostname).filter((h) => h) as string[] | undefined
-        }
-        onClose={editHostDialog.close}
-        isOpen={editHostDialog.isOpen}
-        onSave={async (values: HostUpdateParams) => {
-          const params: ClusterUpdateParams = {
-            hostsNames: [
-              {
-                id: values.hostId,
-                hostname: values.hostname,
-              },
-            ],
-          };
-
-          const { data } = await patchCluster(cluster.id, params);
-          dispatch(updateCluster(data));
-          editHostDialog.close();
-        }}
-      />
+      <EditHostModal />
       <AdditionalNTPSourcesDialog
         cluster={cluster}
         isOpen={additionalNTPSourcesDialog.isOpen}

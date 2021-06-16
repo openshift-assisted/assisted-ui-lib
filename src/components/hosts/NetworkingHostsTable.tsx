@@ -1,12 +1,11 @@
 import React from 'react';
 import { sortable, expandable } from '@patternfly/react-table';
-import { Cluster, Interface, Inventory } from '../../api/types';
+import { Cluster, Interface } from '../../api/types';
 import { ClusterHostsTable } from '.';
 import { HostDetail } from './HostRowDetail';
-import { HostsTableProps } from './HostsTable';
 import { stringToJSON } from '../../api/utils';
 import { ValidationsInfo } from '../../types/hosts';
-import { getHostname, getHostRole } from './utils';
+import { canEditDisks, getHostname, getHostRole, getInventory } from './utils';
 import Hostname from './Hostname';
 import { DASH } from '../constants';
 import { HostsNotShowingLinkProps } from '../clusterConfiguration/DiscoveryTroubleshootingModal';
@@ -15,6 +14,7 @@ import NetworkingStatus from './NetworkingStatus';
 import { getSubnet } from '../clusterConfiguration/utils';
 import { Address4, Address6 } from 'ip-address';
 import RoleCell from './RoleCell';
+import { ClusterHostsTableProps } from './ClusterHostsTable';
 
 const getSelectedNic = (nics: Interface[], currentSubnet: Address4 | Address6) => {
   return nics.find((nic) => {
@@ -51,25 +51,24 @@ const getColumns = (cluster: Cluster) => [
   { title: <HostsCount cluster={cluster} inParenthesis /> },
 ];
 
-type HostToHostTableRow = (cluster: Cluster) => HostsTableProps['hostToHostTableRow'];
-
-const hostToHostTableRow: HostToHostTableRow = (cluster) => (
+const hostToHostTableRow: ClusterHostsTableProps['hostToHostTableRow'] = (
+  host,
   openRows,
-  canEditDisks,
+  cluster,
   onEditHostname,
-) => (host) => {
-  const { id, status, inventory: inventoryString = '' } = host;
-  const inventory = stringToJSON<Inventory>(inventoryString) || {};
+) => {
+  const { id, status } = host;
+  const inventory = getInventory(host);
   const validationsInfo = stringToJSON<ValidationsInfo>(host.validationsInfo) || {};
   const nics = inventory.interfaces || [];
 
   const currentSubnet = cluster.machineNetworkCidr ? getSubnet(cluster.machineNetworkCidr) : null;
   const selectedNic = currentSubnet ? getSelectedNic(nics, currentSubnet) : null;
 
-  const computedHostname = getHostname(host, inventory);
+  const computedHostname = getHostname(host);
   const hostRole = getHostRole(host);
 
-  const editHostname = onEditHostname ? () => onEditHostname(host, inventory) : undefined;
+  const editHostname = onEditHostname ? () => onEditHostname(host) : undefined;
 
   return [
     {
@@ -77,7 +76,7 @@ const hostToHostTableRow: HostToHostTableRow = (cluster) => (
       isOpen: !!openRows[id],
       cells: [
         {
-          title: <Hostname host={host} inventory={inventory} onEditHostname={editHostname} />,
+          title: <Hostname host={host} onEditHostname={editHostname} />,
           props: { 'data-testid': 'host-name' },
           sortableValue: computedHostname || '',
         },
@@ -119,8 +118,6 @@ const hostToHostTableRow: HostToHostTableRow = (cluster) => (
         },
       ],
       host,
-      clusterStatus: cluster.status,
-      inventory,
       key: `${host.id}-master`,
     },
     {
@@ -132,7 +129,7 @@ const hostToHostTableRow: HostToHostTableRow = (cluster) => (
           title: (
             <HostDetail
               key={id}
-              canEditDisks={canEditDisks}
+              canEditDisks={() => canEditDisks(cluster.status, host.status)}
               inventory={inventory}
               host={host}
               validationsInfo={validationsInfo}
@@ -140,8 +137,8 @@ const hostToHostTableRow: HostToHostTableRow = (cluster) => (
           ),
         },
       ],
+      host,
       key: `${host.id}-detail`,
-      inventory,
     },
   ];
 };
@@ -159,7 +156,7 @@ const NetworkingHostsTable: React.FC<NetworkingHostsTableProps> = (props) => {
       {...props}
       testId={'networking-host-table'}
       columns={columns}
-      hostToHostTableRow={hostToHostTableRow(props.cluster)}
+      hostToHostTableRow={hostToHostTableRow}
     />
   );
 };

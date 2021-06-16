@@ -7,6 +7,7 @@ import {
   handleApiError,
   getErrorMessage,
   getPresignedFileUrl,
+  stringToJSON,
 } from '../../api';
 import { AlertsContextType } from '../AlertsContextProvider';
 import { DASH } from '../constants';
@@ -134,8 +135,10 @@ export const getTotalHostCount = (cluster: Cluster) => cluster.totalHostCount ||
 export const getEnabledHosts = (hosts: Host[] = []) =>
   hosts.filter((host) => host.status !== 'disabled');
 
-export const getHostname = (host: Host, inventory: Inventory) =>
-  host.requestedHostname || inventory.hostname;
+export const getInventory = (host?: Host): Inventory =>
+  stringToJSON<Inventory>(host?.inventory) || {};
+
+export const getHostname = (host: Host) => host.requestedHostname || getInventory(host).hostname;
 
 export const getHardwareTypeText = (inventory: Inventory) => {
   let hardwareTypeText = DASH;

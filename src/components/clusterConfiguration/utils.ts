@@ -1,6 +1,5 @@
 import { HostDiscoveryValues, HostSubnets, NetworkConfigurationValues } from '../../types/clusters';
-import { Cluster, ClusterDefaultConfig, Inventory } from '../../api/types';
-import { stringToJSON } from '../../api/utils';
+import { Cluster, ClusterDefaultConfig } from '../../api/types';
 import { Address4, Address6 } from 'ip-address';
 import { getHostname } from '../hosts/utils';
 import { NO_SUBNET_SET } from '../../config/constants';
@@ -28,10 +27,9 @@ const getHumanizedSubnet = (subnet: Address6 | Address4 | null) => {
 export const getHostSubnets = (cluster: Cluster): HostSubnets => {
   const hostnameMap: { [id: string]: string } =
     cluster.hosts?.reduce((acc, host) => {
-      const inventory = stringToJSON<Inventory>(host.inventory) || {};
       acc = {
         ...acc,
-        [host.id]: getHostname(host, inventory),
+        [host.id]: getHostname(host),
       };
       return acc;
     }, {}) || {};

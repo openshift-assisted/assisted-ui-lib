@@ -1,27 +1,21 @@
 import React from 'react';
 import { Button, ButtonVariant } from '@patternfly/react-core';
-import { Host, Inventory } from '../../api/types';
-import { getHostname } from './utils';
+import { Host } from '../../api/types';
+import { getHostname, getInventory } from './utils';
 import { DASH } from '../constants';
 
 type HostnameProps = {
   host: Host;
   onEditHostname?: () => void;
   className?: string;
-  // Provide either inventory or title
-  inventory?: Inventory;
   title?: string;
 };
 
-const Hostname: React.FC<HostnameProps> = ({
-  host,
-  inventory = {},
-  onEditHostname,
-  title,
-  className,
-}) => {
-  const hostname = title || getHostname(host, inventory) || DASH;
-  const isHostnameChangeRequested = !title && host.requestedHostname !== inventory.hostname;
+const Hostname: React.FC<HostnameProps> = ({ host, onEditHostname, title, className }) => {
+  const hostname = title || getHostname(host) || DASH;
+
+  const isHostnameChangeRequested =
+    !title && host.requestedHostname !== getInventory(host).hostname;
 
   const body = (
     <>

@@ -11,4 +11,5 @@ export * as Store from './store';
 export * as Features from './features';
 export * as Reducers from './reducers';
 
+export * from './cim';
 // export * as Types from './types';
