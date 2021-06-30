@@ -30,9 +30,10 @@ type HostProgressProps = {
 const HostProgress: React.FC<HostProgressProps> = ({ host }) => {
   const { status } = host;
   const stages = getHostProgressStages(host);
-  const { currentStage, progressInfo } = getHostProgress(host);
+  // const { currentStage, progressInfo } = getHostProgress(host);
   const currentStageNumber = getHostProgressStageNumber(host);
-  const progressLabel = currentStage + (progressInfo ? `: ${progressInfo}` : ' ');
+  // const progressLabel = currentStage + (progressInfo ? `: ${progressInfo}` : ' ');
+  const progressLabel = host.statusInfo;
 
   return (
     <Progress

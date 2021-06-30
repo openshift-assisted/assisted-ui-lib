@@ -81,19 +81,20 @@ const getOperatorsProgressPercent = (monitoredOperators: MonitoredOperatorsList)
 };
 
 const getInstallationStatus = (cluster: Cluster) => {
-  const { status } = cluster;
+  // const { status } = cluster;
 
-  if (status === 'installed') {
-    return `Installed on ${getHumanizedDateTime(cluster.installCompletedAt)}`;
-  }
-  if (status === 'error') {
-    return `Failed on ${getHumanizedDateTime(cluster.installCompletedAt)}`;
-  }
-  if (status === 'cancelled') {
-    return `Cancelled on ${getHumanizedDateTime(cluster.installCompletedAt)}`;
-  }
+  // if (status === 'installed') {
+  //   return `Installed on ${getHumanizedDateTime(cluster.installCompletedAt)}`;
+  // }
+  // if (status === 'error') {
+  //   return `Failed on ${getHumanizedDateTime(cluster.installCompletedAt)}`;
+  // }
+  // if (status === 'cancelled') {
+  //   return `Cancelled on ${getHumanizedDateTime(cluster.installCompletedAt)}`;
+  // }
 
-  return CLUSTER_STATUS_LABELS[status] || status;
+  // return CLUSTER_STATUS_LABELS[status] || status;
+  return cluster.statusInfo;
 };
 
 const getHostStatusIcon = (hosts: Host[]): React.ReactElement => {
