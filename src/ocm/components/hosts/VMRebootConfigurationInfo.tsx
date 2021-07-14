@@ -8,8 +8,7 @@ import {
   TextVariants,
 } from '@patternfly/react-core';
 import { InfoCircleIcon } from '@patternfly/react-icons';
-import { Host, stringToJSON, Inventory } from '../../../common';
-import PrismCode from '../ui/PrismCode';
+import { Host, stringToJSON, Inventory, PrismCode } from '../../../common';
 
 const Hint = () => (
   <TextContent>

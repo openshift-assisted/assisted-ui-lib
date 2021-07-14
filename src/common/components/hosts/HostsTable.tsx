@@ -292,6 +292,8 @@ export const HostsTable: React.FC<HostsTableProps & WithTestID> = ({
       canEditDisks,
       onEditRole,
       onDiskRole,
+      onAdditionalNtpSource,
+      AdditionalNTPSourcesDialogToggleComponent,
     ],
   );
 

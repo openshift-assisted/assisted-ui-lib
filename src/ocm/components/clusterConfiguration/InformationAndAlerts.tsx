@@ -1,11 +1,10 @@
 import React from 'react';
 import { Text } from '@patternfly/react-core';
-import { Cluster } from '../../../common';
+import { Cluster, HostsNotShowingLink, HostsNotShowingLinkProps } from '../../../common';
 import { HostRequirementsLink, HostRequirementsLinkProps } from '../fetching/HostRequirements';
 import VMRebootConfigurationInfo from '../hosts/VMRebootConfigurationInfo';
 import OCSDisksManualFormattingHint from '../hosts/OCSDisksManualFormattingHint';
 import { isAddHostsCluster } from '../clusters/utils';
-import { HostsNotShowingLink, HostsNotShowingLinkProps } from './DiscoveryTroubleshootingModal';
 import FormatDiskWarning from './FormatDiskWarning';
 
 const InformationAndAlerts: React.FC<{

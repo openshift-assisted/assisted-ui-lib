@@ -12,14 +12,19 @@ import {
 import { AddCircleOIcon } from '@patternfly/react-icons';
 
 import { selectClusterTableRows, selectClustersUIState } from '../../selectors/clusters';
-import { LoadingState, ErrorState, EmptyState } from '../ui/uiState';
-import { ResourceUIState } from '../../../common';
+import {
+  ResourceUIState,
+  Alerts,
+  LoadingState,
+  ErrorState,
+  EmptyState,
+  useAlerts,
+  AlertsContextProvider,
+} from '../../../common';
 import ClustersTable from './ClustersTable';
 import { fetchClustersAsync, deleteCluster } from '../../reducers/clusters/clustersSlice';
 import { deleteCluster as ApiDeleteCluster } from '../../api/clusters';
-import Alerts from '../ui/Alerts';
 import { handleApiError, getErrorMessage } from '../../api/utils';
-import { useAlerts, AlertsContextProvider } from '../AlertsContextProvider';
 import ClusterBreadcrumbs from './ClusterBreadcrumbs';
 import { routeBasePath } from '../../config';
 

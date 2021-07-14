@@ -22,6 +22,7 @@ import NtpValidationStatus from './NtpValidationStatus';
 import DiskLimitations from './DiskLimitations';
 import DiskRole, { onDiskRoleType } from './DiskRole';
 import { getHardwareTypeText, fileSize } from './utils';
+import { ValidationInfoActionProps } from './HostValidationGroups';
 
 type HostDetailProps = {
   canEditDisks?: (host: Host) => boolean;
@@ -29,7 +30,7 @@ type HostDetailProps = {
   inventory: Inventory;
   host: Host;
   validationsInfo: ValidationsInfo;
-  AdditionalNTPSourcesDialogToggleComponent: React.FC;
+  AdditionalNTPSourcesDialogToggleComponent: ValidationInfoActionProps['AdditionalNTPSourcesDialogToggleComponent'];
 };
 
 type SectionTitleProps = {

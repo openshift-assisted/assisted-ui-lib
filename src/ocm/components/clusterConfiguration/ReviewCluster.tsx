@@ -1,10 +1,17 @@
 import React from 'react';
 import { Table, TableBody, TableVariant } from '@patternfly/react-table';
-import { Cluster, Host, Inventory, stringToJSON } from '../../../common';
-import { getSimpleHardwareInfo } from '../hosts/hardwareInfo';
-import { DetailList, DetailItem } from '../ui/DetailList';
+import {
+  Cluster,
+  Host,
+  Inventory,
+  stringToJSON,
+  fileSize,
+  getEnabledHosts,
+  DetailList,
+  DetailItem,
+} from '../../../common';
+import { getSimpleHardwareInfo } from '../../../common/components/hosts/hardwareInfo';
 import { ClusterValidations, HostsValidations } from './ReviewValidations';
-import { fileSize, getEnabledHosts } from '../hosts/utils';
 
 import './ReviewCluster.css';
 

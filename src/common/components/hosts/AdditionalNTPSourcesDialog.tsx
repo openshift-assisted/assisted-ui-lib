@@ -45,7 +45,7 @@ const AdditionalNTPSourcesForm: React.FC<AdditionalNTPSourcesFormProps> = ({
     formikHelpers: FormikHelpers<ClusterUpdateParams>,
   ) => {
     formikHelpers.setStatus({ error: null });
-    if (values.additionalNtpSource) {
+    if (onAdditionalNtpSource && values.additionalNtpSource) {
       const onError = (message: string) =>
         formikHelpers.setStatus({
           error: {

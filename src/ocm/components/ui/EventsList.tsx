@@ -9,9 +9,7 @@ import {
   SearchIcon,
 } from '@patternfly/react-icons';
 import { ExtraParamsType } from '@patternfly/react-table/dist/js/components/Table/base';
-import { fitContent, noPadding } from '../ui/table/wrappable';
-import { getHumanizedDateTime } from '../../../common';
-import { EmptyState } from './uiState';
+import { getHumanizedDateTime, EmptyState, fitContent, noPadding } from '../../../common';
 
 const getEventRowKey = ({ rowData }: ExtraParamsType) =>
   rowData?.props?.event.sortableTime + rowData?.props?.event.message;

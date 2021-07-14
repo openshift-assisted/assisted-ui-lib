@@ -1,6 +1,7 @@
 import React from 'react';
 import { Validation, ValidationsInfo } from '../../../common/types/hosts';
 import HostPropertyValidationPopover from './HostPropertyValidationPopover';
+import { ValidationInfoActionProps } from './HostValidationGroups';
 
 const getLabel = (validationStatus?: Validation['status']) => {
   switch (validationStatus) {
@@ -15,7 +16,7 @@ const getLabel = (validationStatus?: Validation['status']) => {
 
 type NtpValidationsStatusProps = {
   validationsInfo: ValidationsInfo;
-  AdditionalNTPSourcesDialogToggleComponent: React.FC;
+  AdditionalNTPSourcesDialogToggleComponent: ValidationInfoActionProps['AdditionalNTPSourcesDialogToggleComponent'];
 };
 
 const NtpValidationStatus: React.FC<NtpValidationsStatusProps> = ({
@@ -23,7 +24,11 @@ const NtpValidationStatus: React.FC<NtpValidationsStatusProps> = ({
   AdditionalNTPSourcesDialogToggleComponent,
 }) => {
   const ntpSyncedValidation = validationsInfo.network?.find((v) => v.id === 'ntp-synced');
-  const actions = [<AdditionalNTPSourcesDialogToggleComponent key="add-ntp-sources" />];
+  const actions = [];
+  if (AdditionalNTPSourcesDialogToggleComponent) {
+    actions.push(<AdditionalNTPSourcesDialogToggleComponent key="add-ntp-sources" />);
+  }
+
   return (
     <HostPropertyValidationPopover
       validation={ntpSyncedValidation}

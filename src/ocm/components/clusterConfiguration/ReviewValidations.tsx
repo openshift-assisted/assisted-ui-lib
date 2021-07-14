@@ -33,8 +33,8 @@ import {
   stringToJSON,
   CLUSTER_VALIDATION_LABELS,
   HOST_VALIDATION_LABELS,
+  getEnabledHosts,
 } from '../../../common';
-import { getEnabledHosts } from '../hosts/utils';
 import { wizardStepNames } from '../clusterWizard/constants';
 
 const AllValidationsPassed = () => (

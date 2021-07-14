@@ -1,6 +1,6 @@
 import React from 'react';
 import { getErrorMessage, handleApiError, ocmClient } from '../../api';
-import { useAlerts } from '../AlertsContextProvider';
+import { useAlerts } from '../../../common';
 
 export const usePullSecretFetch = () => {
   const [pullSecret, setPullSecret] = React.useState<string>();

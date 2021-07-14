@@ -14,7 +14,6 @@ import {
 import Axios, { CancelTokenSource } from 'axios';
 import { Formik, FormikHelpers } from 'formik';
 import { createClusterDownloadsImage, patchCluster } from '../../api';
-import { LoadingState } from '../ui/uiState';
 import { handleApiError, getErrorMessage } from '../../api';
 import {
   ImageCreateParams,
@@ -23,13 +22,14 @@ import {
   httpProxyValidationSchema,
   noProxyValidationSchema,
   sshPublicKeyValidationSchema,
+  LoadingState,
+  ProxyFields,
+  UploadSSH,
 } from '../../../common';
 import { updateCluster, forceReload } from '../../reducers/clusters';
 import { DiscoveryImageFormValues } from './types';
-import ProxyFields from './ProxyFields';
 import { usePullSecretFetch } from '../fetching/pullSecret';
-import UploadSSH from './UploadSSH';
-import DiscoveryImageTypeControlGroup from './DiscoveryImageTypeControlGroup';
+import DiscoveryImageTypeControlGroup from '../../../common/components/clusterConfiguration/DiscoveryImageTypeControlGroup';
 
 const validationSchema = Yup.lazy<DiscoveryImageFormValues>((values) =>
   Yup.object<DiscoveryImageFormValues>().shape({

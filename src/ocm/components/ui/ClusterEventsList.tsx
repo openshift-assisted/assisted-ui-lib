@@ -2,12 +2,11 @@ import React from 'react';
 import { Button, ButtonVariant } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
 import EventsList from './EventsList';
-import { EventList, Cluster } from '../../../common';
+import { EventList, Cluster, EmptyState } from '../../../common';
 import ClusterEventsToolbar, {
   ClusterEventsFiltersType,
   getInitialClusterEventsFilters,
 } from './ClusterEventsToolbar';
-import { EmptyState } from './uiState';
 
 export type ClusterEventsListProps = {
   events: EventList;

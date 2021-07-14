@@ -17,8 +17,8 @@ import {
   removeProtocolFromURL,
   stringToJSON,
   ToolbarButton,
+  PrismCode,
 } from '../../../common';
-import PrismCode from '../ui/PrismCode';
 
 type WebConsoleHintProps = {
   cluster: Cluster;

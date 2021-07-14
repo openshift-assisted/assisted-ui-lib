@@ -223,8 +223,8 @@ type HostStatusProps = {
   onEditHostname?: () => void;
   statusOverride?: Host['status'];
   sublabel?: string;
-  onAdditionalNtpSource: ValidationInfoActionProps['onAdditionalNtpSource'];
-  AdditionalNTPSourcesDialogToggleComponent: ValidationInfoActionProps['AdditionalNTPSourcesDialogToggleComponent'];
+  onAdditionalNtpSource?: ValidationInfoActionProps['onAdditionalNtpSource'];
+  AdditionalNTPSourcesDialogToggleComponent?: ValidationInfoActionProps['AdditionalNTPSourcesDialogToggleComponent'];
 };
 
 const HostStatus: React.FC<HostStatusProps> = ({

@@ -1,8 +1,6 @@
 import React from 'react';
 import { GridItem, TextContent, Text } from '@patternfly/react-core';
-import { Cluster } from '../../../common';
-import { DetailList, DetailItem } from '../ui/DetailList';
-import { isSingleNodeCluster } from '../clusters/utils';
+import { Cluster, isSingleNodeCluster, DetailList, DetailItem } from '../../../common';
 
 type ClusterPropertiesProps = {
   cluster: Cluster;

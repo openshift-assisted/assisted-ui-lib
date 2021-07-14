@@ -4,10 +4,10 @@
   "description": "React component library for the Bare Metal Installer",
   "license": "Apache-2.0",
   "repository": "openshift-assisted/assisted-ui-lib",
-  "main": "dist/index-cim.js",
-  "module": "dist/index-cim.modern.js",
-  "source": "src/index-cim.ts",
-  "types": "dist/src/index-cim.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.modern.js",
+  "source": "src/index.ts",
+  "types": "dist/src/index.d.ts",
   "engines": {
     "node": ">=10"
   },

@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import EventsList from '../ui/EventsList';
-import { EventList, Event, Cluster, EVENTS_POLLING_INTERVAL } from '../../../common';
+import {
+  EventList,
+  Event,
+  Cluster,
+  EVENTS_POLLING_INTERVAL,
+  ErrorState,
+  LoadingState,
+} from '../../../common';
 import { getEvents } from '../../api/clusters';
-import { ErrorState, LoadingState } from '../ui/uiState';
 import ClusterEventsList from '../ui/ClusterEventsList';
 import { handleApiError } from '../../api';
 

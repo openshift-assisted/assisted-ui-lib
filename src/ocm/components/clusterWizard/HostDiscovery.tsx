@@ -9,17 +9,17 @@ import {
   OPERATOR_NAME_CNV,
   OPERATOR_NAME_LSO,
   OPERATOR_NAME_OCS,
+  ClusterWizardStep,
+  useAlerts,
+  getHostDiscoveryInitialValues,
 } from '../../../common';
 import { HostDiscoveryValues } from '../../../common/types/clusters';
 import HostInventory from '../clusterConfiguration/HostInventory';
 import ClusterWizardContext from './ClusterWizardContext';
-import ClusterWizardStep from './ClusterWizardStep';
 import { canNextHostDiscovery } from './wizardTransition';
 import { getErrorMessage, handleApiError } from '../../api/utils';
-import { useAlerts } from '../AlertsContextProvider';
 import { patchCluster } from '../../api/clusters';
 import { updateCluster } from '../../reducers/clusters/currentClusterSlice';
-import { getHostDiscoveryInitialValues } from '../clusterConfiguration/utils';
 import { getOlmOperatorCreateParamsByName } from '../clusters/utils';
 import ClusterWizardFooter from './ClusterWizardFooter';
 import ClusterWizardNavigation from './ClusterWizardNavigation';

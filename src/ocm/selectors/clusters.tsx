@@ -4,12 +4,17 @@ import { IRow, IRowData } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
 
 import { ClusterTableRows } from '../../common/types/clusters';
-import { Cluster, DASH, ResourceUIState } from '../../common';
+import {
+  Cluster,
+  DASH,
+  getDateTimeCell,
+  getReadyHostCount,
+  HostsCount,
+  HumanizedSortable,
+  ResourceUIState,
+} from '../../common';
 import { RootState } from '../store/rootReducer';
-import { getDateTimeCell, HumanizedSortable } from '../components/ui/table/utils';
 import ClusterStatus, { getClusterStatusText } from '../components/clusters/ClusterStatus';
-import HostsCount from '../components/hosts/HostsCount';
-import { getReadyHostCount } from '../components/hosts/utils';
 import { routeBasePath } from '../config/routeBaseBath';
 
 const selectClusters = (state: RootState) => state.clusters.data;

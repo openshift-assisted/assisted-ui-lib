@@ -1,12 +1,18 @@
 import React from 'react';
 import { List, ListItem, Text, TextContent } from '@patternfly/react-core';
 
-import { fileSize } from './utils';
-import { Cluster, PreflightHardwareRequirements, OPERATOR_NAME_CNV } from '../../../common';
-import { addAlert } from '../../reducers/alerts/alertsSlice';
-import { ErrorState, ExternalLink, LoadingState } from '../ui';
-import { RenderIf } from '../ui/RenderIf';
+import {
+  Cluster,
+  PreflightHardwareRequirements,
+  OPERATOR_NAME_CNV,
+  ErrorState,
+  ExternalLink,
+  LoadingState,
+  fileSize,
+  RenderIf,
+} from '../../../common';
 import { getClusterPreflightRequirements, getErrorMessage, handleApiError } from '../../api';
+import { addAlert } from '../../../common/reducers/alertsSlice';
 
 export type PreflightHWRequirementsContentComponent = React.FC<{
   clusterId: Cluster['id'];

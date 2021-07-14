@@ -7,10 +7,13 @@ import {
   TextContent,
   Text,
 } from '@patternfly/react-core';
-import { Cluster, getBugzillaLink } from '../../../common';
-import { toSentence } from '../ui/table/utils';
-import { useAlerts } from '../AlertsContextProvider';
-import { canDownloadClusterLogs } from '../hosts/utils';
+import {
+  Cluster,
+  getBugzillaLink,
+  canDownloadClusterLogs,
+  useAlerts,
+  toSentence,
+} from '../../../common';
 import { downloadClusterInstallationLogs } from './utils';
 import { useModalDialogsContext } from '../hosts/ModalDialogsContext';
 

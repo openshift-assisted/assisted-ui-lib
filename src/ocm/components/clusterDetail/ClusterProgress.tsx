@@ -30,12 +30,15 @@ import {
   MonitoredOperatorsList,
   getHumanizedDateTime,
   CLUSTER_STATUS_LABELS,
+  DetailList,
+  DetailItem,
+  getHostProgressStages,
+  getHostProgressStageNumber,
+  getEnabledHosts,
+  RenderIf,
 } from '../../../common';
-import { getHostProgressStages, getHostProgressStageNumber, getEnabledHosts } from '../hosts/utils';
-import { DetailList, DetailItem } from '../ui';
 import { EventsModal } from '../ui/eventsModal';
 import OperatorsProgressItem from './OperatorsProgressItem';
-import { RenderIf } from '../ui/RenderIf';
 import { getOlmOperators } from '../clusters/utils';
 
 import './ClusterProgress.css';

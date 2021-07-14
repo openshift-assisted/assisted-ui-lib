@@ -1,10 +1,13 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import Alerts from '../ui/Alerts';
-import { useAlerts } from '../AlertsContextProvider';
-import { Cluster } from '../../../common';
+import {
+  Cluster,
+  WizardFooter,
+  WizardFooterGenericProps,
+  Alerts,
+  useAlerts,
+} from '../../../common';
 import ClusterValidationSection from '../clusterConfiguration/ClusterValidationSection';
-import { WizardFooter, WizardFooterGenericProps } from '../ui';
 import { routeBasePath } from '../../config/routeBaseBath';
 
 type ClusterWizardFooterProps = WizardFooterGenericProps & {

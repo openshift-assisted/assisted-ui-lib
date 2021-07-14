@@ -2,12 +2,14 @@ import React from 'react';
 import { Text, TextContent, Button } from '@patternfly/react-core';
 import ClusterHostsTable from '../hosts/ClusterHostsTable';
 import { DiscoveryImageModalButton } from '../clusterConfiguration/discoveryImageModal';
-import { DiscoveryTroubleshootingModal } from '../clusterConfiguration/DiscoveryTroubleshootingModal';
 import InformationAndAlerts from '../clusterConfiguration/InformationAndAlerts';
 import DiscoveryInstructions from '../clusterConfiguration/DiscoveryInstructions';
-import { AddHostsContext } from './AddHostsContext';
 import { AddHostRequirementsContent } from '../hosts/HostRequirementsContent';
-import { isSingleNodeCluster } from '../clusters/utils';
+import {
+  AddHostsContext,
+  DiscoveryTroubleshootingModal,
+  isSingleNodeCluster,
+} from '../../../common';
 
 const InventoryAddHosts: React.FC = () => {
   const { cluster } = React.useContext(AddHostsContext);

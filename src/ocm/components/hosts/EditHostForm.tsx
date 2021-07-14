@@ -19,10 +19,10 @@ import {
   InputField,
   hostnameValidationSchema,
   uniqueHostnameValidationSchema,
+  canHostnameBeChanged,
+  StaticTextField,
 } from '../../../common';
 import GridGap from '../ui/GridGap';
-import { StaticTextField } from '../ui/StaticTextField';
-import { canHostnameBeChanged } from './utils';
 
 export type HostUpdateParams = {
   hostId: string; // identifier, uuid

@@ -7,8 +7,15 @@ import {
   getErrorMessage,
   getClusterLogsDownloadUrl,
 } from '../../api';
-import { Cluster, Host, HostRole, Inventory, Presigned, stringToJSON } from '../../../common';
-import { AlertsContextType } from '../AlertsContextProvider';
+import {
+  Cluster,
+  Host,
+  HostRole,
+  Inventory,
+  Presigned,
+  stringToJSON,
+  AlertsContextType,
+} from '../../../common';
 
 export const downloadClusterInstallationLogs = async (
   addAlert: AlertsContextType['addAlert'],

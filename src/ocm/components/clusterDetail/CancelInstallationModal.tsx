@@ -10,10 +10,9 @@ import {
 } from '@patternfly/react-core';
 import { postCancelInstallation } from '../../api/clusters';
 import { getErrorMessage, handleApiError } from '../../api/utils';
-import ErrorState from '../ui/uiState/ErrorState';
-import LoadingState from '../ui/uiState/LoadingState';
 import { updateCluster } from '../../reducers/clusters/currentClusterSlice';
 import { useModalDialogsContext } from '../hosts/ModalDialogsContext';
+import { ErrorState, LoadingState } from '../../../common';
 
 const CancelInstallationModal: React.FC = () => {
   const dispatch = useDispatch();

@@ -8,10 +8,9 @@ import {
   ButtonVariant,
   PageSection,
 } from '@patternfly/react-core';
-import { AlertsContextProvider } from '../AlertsContextProvider';
+import { AlertsContextProvider, ErrorState, LoadingState } from '../../../common';
 import ClusterBreadcrumbs from './ClusterBreadcrumbs';
 import { ClusterDefaultConfigurationProvider } from '../clusterConfiguration/ClusterDefaultConfigurationContext';
-import { ErrorState, LoadingState } from '../ui/uiState';
 import NewClusterWizard from '../clusterWizard/NewClusterWizard';
 import { routeBasePath } from '../../config';
 

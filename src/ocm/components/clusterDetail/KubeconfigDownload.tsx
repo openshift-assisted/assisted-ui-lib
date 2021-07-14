@@ -2,9 +2,7 @@ import React from 'react';
 import { saveAs } from 'file-saver';
 import { GridItem, Button, ButtonVariant } from '@patternfly/react-core';
 import { getPresignedFileUrl, getClusterFileDownload } from '../../api/clusters';
-import { Cluster, Presigned } from '../../../common';
-import { canDownloadKubeconfig } from '../hosts/utils';
-import { useAlerts } from '../AlertsContextProvider';
+import { Cluster, Presigned, canDownloadKubeconfig, useAlerts } from '../../../common';
 import { getErrorMessage, handleApiError, ocmClient } from '../../api';
 
 type KubeconfigDownloadProps = {

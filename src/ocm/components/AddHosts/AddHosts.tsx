@@ -10,16 +10,19 @@ import {
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { getErrorMessage, handleApiError, installHosts } from '../../api';
-import { addAlert } from '../../reducers/alerts/alertsSlice';
 import { updateCluster } from '../../reducers/clusters/currentClusterSlice';
 import { DiscoveryImageModal } from '../clusterConfiguration/discoveryImageModal';
 import { ModalDialogsContextProvider } from '../hosts/ModalDialogsContext';
-import { getReadyHostCount } from '../hosts/utils';
-import { ToolbarButton, ToolbarSecondaryGroup } from '../../../common';
-import Alerts from '../ui/Alerts';
+import {
+  ToolbarButton,
+  ToolbarSecondaryGroup,
+  getReadyHostCount,
+  Alerts,
+  AddHostsContext,
+} from '../../../common';
 import { EventsModalButton } from '../ui/eventsModal';
-import { AddHostsContext } from './AddHostsContext';
 import InventoryAddHosts from './InventoryAddHost';
+import { addAlert } from '../../../common/reducers/alertsSlice';
 
 const AddHosts: React.FC = () => {
   const { cluster } = React.useContext(AddHostsContext);

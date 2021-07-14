@@ -15,7 +15,7 @@ import {
 } from '@patternfly/react-core';
 import { global_success_color_100 as successColor } from '@patternfly/react-tokens';
 import { CheckCircleIcon } from '@patternfly/react-icons';
-import { DetailList, DetailItem } from '../ui/DetailList';
+import { DetailList, DetailItem } from '../../../common';
 
 export type DownloadISOProps = {
   fileName: string;

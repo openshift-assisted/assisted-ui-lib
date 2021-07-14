@@ -20,11 +20,11 @@ import './HostValidationGroups.css';
 
 export type ValidationInfoActionProps = {
   onEditHostname?: () => void;
-  onAdditionalNtpSource: (
+  onAdditionalNtpSource?: (
     additionalNtpSource: string,
     onError: (message: string) => void,
   ) => Promise<void>; // TODO(mlibra): change to optional once tested
-  AdditionalNTPSourcesDialogToggleComponent: React.FC;
+  AdditionalNTPSourcesDialogToggleComponent?: React.FC;
   host: Host;
 };
 
@@ -60,6 +60,7 @@ const ValidationGroupAlert: React.FC<ValidationGroupAlertProps> = ({
     actionLinks.push(<Hostname key="change-hostname" title="Change hostname" {...props} />);
   }
   if (
+    AdditionalNTPSourcesDialogToggleComponent &&
     validations.find(
       (validation) => validation.status === 'failure' && validation.id === 'ntp-synced',
     )

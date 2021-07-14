@@ -8,14 +8,18 @@ import {
   TextContent,
   Text,
 } from '@patternfly/react-core';
-import { ErrorState, LoadingState } from '../ui/uiState';
-import { ResourceUIState, Cluster } from '../../../common';
+import {
+  ResourceUIState,
+  Cluster,
+  ErrorState,
+  LoadingState,
+  AlertsContextProvider,
+  AddHostsContextProvider,
+} from '../../../common';
 import ClusterDetail from '../clusterDetail/ClusterDetail';
 import CancelInstallationModal from '../clusterDetail/CancelInstallationModal';
 import ResetClusterModal from '../clusterDetail/ResetClusterModal';
-import { AlertsContextProvider } from '../AlertsContextProvider';
 import { AddHosts } from '../AddHosts';
-import { AddHostsContextProvider } from '../AddHosts/AddHostsContext';
 import { ClusterDefaultConfigurationProvider } from '../clusterConfiguration/ClusterDefaultConfigurationContext';
 import ClusterBreadcrumbs from './ClusterBreadcrumbs';
 import ClusterWizard from '../clusterWizard/ClusterWizard';

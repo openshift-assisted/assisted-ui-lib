@@ -1,8 +1,7 @@
 import React from 'react';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { PageSectionVariants, PageSection } from '@patternfly/react-core';
-import { Cluster } from '../../common';
-import { ErrorState, LoadingState } from './ui';
+import { Cluster, ErrorState, LoadingState } from '../../common';
 import { routeBasePath } from '../config';
 import { NewClusterPage } from './clusters';
 import { getClusters, handleApiError } from '../api';

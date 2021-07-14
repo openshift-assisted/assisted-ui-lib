@@ -1,13 +1,19 @@
 import React, { ReactNode } from 'react';
 import { Button, ButtonVariant, EmptyStateVariant } from '@patternfly/react-core';
-import { AddHostsClusterCreateParams, Cluster, POLLING_INTERVAL } from '../../../common';
+import {
+  AddHostsClusterCreateParams,
+  Cluster,
+  POLLING_INTERVAL,
+  AddHostsContextProvider,
+  AlertsContextProvider,
+  ErrorState,
+  LoadingState,
+} from '../../../common';
 import { usePullSecretFetch } from '../fetching/pullSecret';
-import { AssistedUILibVersion, ErrorState, LoadingState } from '../ui';
+import { AssistedUILibVersion } from '../ui';
 import { addHostsClusters } from '../../api/addHostsClusters';
-import { AlertsContextProvider } from '../AlertsContextProvider';
 import { useOpenshiftVersions } from '../fetching/openshiftVersions';
 import { getCluster, handleApiError } from '../../api';
-import { AddHostsContextProvider } from './AddHostsContext';
 import AddHosts from './AddHosts';
 import { OcmClusterType } from './types';
 import { getOpenshiftClusterId } from './utils';

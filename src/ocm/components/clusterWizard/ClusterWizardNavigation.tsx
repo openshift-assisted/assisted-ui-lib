@@ -1,7 +1,6 @@
 import React from 'react';
 import { WizardNav } from '@patternfly/react-core';
-import WizardNavItem from '../ui/WizardNavItem';
-import { Cluster } from '../../../common';
+import { Cluster, WizardNavItem } from '../../../common';
 import {
   canNextHostDiscovery,
   canNextClusterDetails,

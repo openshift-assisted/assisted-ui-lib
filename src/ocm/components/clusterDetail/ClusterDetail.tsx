@@ -10,14 +10,19 @@ import {
   Grid,
   Alert,
 } from '@patternfly/react-core';
-import { Cluster, ToolbarButton, ToolbarSecondaryGroup } from '../../../common';
+import {
+  Cluster,
+  ToolbarButton,
+  ToolbarSecondaryGroup,
+  Alerts,
+  canDownloadClusterLogs,
+  useAlerts,
+  RenderIf,
+} from '../../../common';
 import { EventsModalButton } from '../ui/eventsModal';
 import ClusterHostsTable from '../hosts/ClusterHostsTable';
 import ClusterToolbar from '../clusters/ClusterToolbar';
-import Alerts from '../ui/Alerts';
 import { downloadClusterInstallationLogs, getClusterDetailId } from './utils';
-import { useAlerts } from '../AlertsContextProvider';
-import { canDownloadClusterLogs } from '../hosts/utils';
 import ClusterProgress from './ClusterProgress';
 import { LaunchOpenshiftConsoleButton } from './ConsoleModal';
 import KubeconfigDownload from './KubeconfigDownload';
@@ -29,7 +34,6 @@ import ClusterDetailStatusVarieties, {
 import { useModalDialogsContext } from '../hosts/ModalDialogsContext';
 import { canAbortInstallation } from '../clusters/utils';
 import { useDefaultConfiguration } from '../clusterConfiguration/ClusterDefaultConfigurationContext';
-import { RenderIf } from '../ui/RenderIf';
 
 type ClusterDetailProps = {
   cluster: Cluster;

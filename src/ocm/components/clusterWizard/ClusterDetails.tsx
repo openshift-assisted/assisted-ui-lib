@@ -1,15 +1,20 @@
 import React from 'react';
 import _ from 'lodash';
-import { Cluster, ClusterCreateParams, ClusterUpdateParams, ManagedDomain } from '../../../common';
-import ClusterWizardStep from './ClusterWizardStep';
 import { useHistory } from 'react-router-dom';
-import LoadingState from '../ui/uiState/LoadingState';
+import {
+  Cluster,
+  ClusterCreateParams,
+  ClusterUpdateParams,
+  ManagedDomain,
+  useAlerts,
+  LoadingState,
+  ClusterWizardStep,
+} from '../../../common';
 import { usePullSecretFetch } from '../fetching/pullSecret';
 import { getClusters, patchCluster, postCluster } from '../../api/clusters';
 import { getErrorMessage, handleApiError } from '../../api/utils';
 import { updateCluster } from '../../reducers/clusters/currentClusterSlice';
 import { useDispatch } from 'react-redux';
-import { useAlerts } from '../AlertsContextProvider';
 import ClusterWizardContext from './ClusterWizardContext';
 import { getManagedDomains } from '../../api/domains';
 import { canNextClusterDetails, ClusterWizardFlowStateType } from './wizardTransition';

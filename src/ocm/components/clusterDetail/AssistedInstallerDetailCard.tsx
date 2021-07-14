@@ -4,13 +4,17 @@ import { Link } from 'react-router-dom';
 import { Button, ButtonVariant, Card, CardBody, CardHeader, Title } from '@patternfly/react-core';
 import { store } from '../../store';
 import { isSingleClusterMode, OCM_CLUSTER_LIST_LINK } from '../../config';
-import { ResourceUIState, FeatureGateContextProvider } from '../../../common';
-import { AlertsContextProvider } from '../AlertsContextProvider';
+import {
+  AlertsContextProvider,
+  ResourceUIState,
+  FeatureGateContextProvider,
+  ErrorState,
+  LoadingState,
+} from '../../../common';
 import { useClusterPolling, useFetchCluster } from '../clusters/clusterPolling';
 import ClusterWizard from '../clusterWizard/ClusterWizard';
 import { ClusterDefaultConfigurationProvider } from '../clusterConfiguration/ClusterDefaultConfigurationContext';
 import { ModalDialogsContextProvider } from '../hosts/ModalDialogsContext';
-import { ErrorState, LoadingState } from '../ui';
 import { DiscoveryImageModal } from '../clusterConfiguration/discoveryImageModal';
 import ClusterInstallationProgressCard from './ClusterInstallationProgressCard';
 import CancelInstallationModal from './CancelInstallationModal';

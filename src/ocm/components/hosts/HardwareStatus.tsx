@@ -1,12 +1,12 @@
 import React from 'react';
-import { Host } from '../../../common';
+import { Host, HostStatus } from '../../../common';
 import { ValidationsInfo } from '../../../common/types/hosts';
-import HostStatus from './HostStatus';
 import {
   getFailingClusterWizardSoftValidationIds,
   getWizardStepHostStatus,
   getWizardStepHostValidationsInfo,
 } from '../clusterWizard/wizardTransition';
+import { AdditionalNTPSourcesDialogToggle } from './AdditionaNTPSourceDialogToggle';
 
 type HardwareStatusProps = {
   host: Host;
@@ -28,6 +28,7 @@ const HardwareStatus: React.FC<HardwareStatusProps> = (props) => {
       statusOverride={hardwareStatus}
       validationsInfo={validationsInfo}
       sublabel={sublabel}
+      AdditionalNTPSourcesDialogToggleComponent={AdditionalNTPSourcesDialogToggle}
     />
   );
 };
