@@ -9,27 +9,27 @@ import {
   ClusterUpdateParams,
   FormikAutoSave,
   getFormikErrorFields,
+  useAlerts,
+  ClusterWizardStep,
+  isSingleNodeCluster,
+  NetworkingHostsTable,
+  ClusterWizardStepHeader,
+  NetworkConfigurationFormFields,
+  getNetworkConfigurationValidationSchema,
+  getNetworkInitialValues,
+  getHostSubnets,
 } from '../../../common';
 import { HostSubnet, NetworkConfigurationValues } from '../../../common/types/clusters';
-import { useAlerts } from '../AlertsContextProvider';
-import ClusterWizardStep from '../clusterWizard/ClusterWizardStep';
 import { updateCluster } from '../../reducers/clusters/currentClusterSlice';
 import { canNextNetwork } from '../clusterWizard/wizardTransition';
 import ClusterWizardContext from '../clusterWizard/ClusterWizardContext';
-import { useDefaultConfiguration } from './ClusterDefaultConfigurationContext';
-import NetworkingHostsTable from '../hosts/NetworkingHostsTable';
-import { isSingleNodeCluster } from '../clusters/utils';
-import ClusterWizardStepHeader from '../clusterWizard/ClusterWizardStepHeader';
 import ClusterWizardFooter from '../clusterWizard/ClusterWizardFooter';
 import ClusterWizardNavigation from '../clusterWizard/ClusterWizardNavigation';
 import { ClusterHostsTable } from '../hosts';
 import { getErrorMessage, handleApiError, patchCluster } from '../../api';
-import NetworkConfigurationFormFields from './NetworkConfigurationFormFields';
-import {
-  getNetworkConfigurationValidationSchema,
-  getNetworkInitialValues,
-} from './networkConfigurationValidation';
-import { getHostSubnets } from './utils';
+import NetworkingStatus from '../hosts/NetworkingStatus';
+import ClusterWizardHeaderExtraActions from './ClusterWizardHeaderExtraActions';
+import { useDefaultConfiguration } from './ClusterDefaultConfigurationContext';
 
 const NetworkConfigurationForm: React.FC<{
   cluster: Cluster;
@@ -111,7 +111,11 @@ const NetworkConfigurationForm: React.FC<{
           <>
             <Grid hasGutter>
               <GridItem>
-                <ClusterWizardStepHeader cluster={cluster}>Networking</ClusterWizardStepHeader>
+                <ClusterWizardStepHeader
+                  extraItems={<ClusterWizardHeaderExtraActions cluster={cluster} />}
+                >
+                  Networking
+                </ClusterWizardStepHeader>
               </GridItem>
               <GridItem span={12} lg={10} xl={9} xl2={7}>
                 <NetworkConfigurationFormFields
@@ -124,7 +128,11 @@ const NetworkConfigurationForm: React.FC<{
                 <TextContent>
                   <Text component="h2">Host inventory</Text>
                 </TextContent>
-                <NetworkingHostsTable cluster={cluster} TableComponent={ClusterHostsTable} />
+                <NetworkingHostsTable
+                  cluster={cluster}
+                  TableComponent={ClusterHostsTable}
+                  HostNetworkingStatusComponent={NetworkingStatus}
+                />
               </GridItem>
             </Grid>
             <FormikAutoSave />

@@ -14,11 +14,11 @@ import {
 import { Formik, FormikConfig, FormikProps } from 'formik';
 import * as Yup from 'yup';
 import {
+  InputField,
   hostnameValidationSchema,
   ipOrDomainValidationSchema,
   macAddressValidationSchema,
-} from '../ui/formik/validationSchemas';
-import { InputField } from '../ui';
+} from '../../../common';
 import { AddBmcValues } from './types';
 
 type AddBmcFormProps = {

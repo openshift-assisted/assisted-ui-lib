@@ -1,19 +1,25 @@
 import React from 'react';
 import { Text, TextContent, Button, Stack, StackItem } from '@patternfly/react-core';
-import { Cluster, PopoverIcon, CheckboxField, useFeature } from '../../../common';
+import { HelpIcon } from '@patternfly/react-icons';
+import {
+  Cluster,
+  PopoverIcon,
+  CheckboxField,
+  useFeature,
+  isSingleNodeCluster,
+  ClusterWizardStepHeader,
+  DiscoveryTroubleshootingModal,
+} from '../../../common';
 import HostsDiscoveryTable from '../hosts/HostsDiscoveryTable';
-import { isSingleNodeCluster } from '../clusters/utils';
 import DiscoveryInstructions from './DiscoveryInstructions';
 import { DiscoveryImageModalButton } from './discoveryImageModal';
-import { DiscoveryTroubleshootingModal } from './DiscoveryTroubleshootingModal';
 import InformationAndAlerts from './InformationAndAlerts';
 import {
   HostRequirementsContent,
   SingleHostRequirementsContent,
   CNVHostRequirementsContent,
 } from '../hosts/HostRequirementsContent';
-import ClusterWizardStepHeader from '../clusterWizard/ClusterWizardStepHeader';
-import { HelpIcon } from '@patternfly/react-icons';
+import ClusterWizardHeaderExtraActions from './ClusterWizardHeaderExtraActions';
 
 const OCSLabel: React.FC = () => (
   <>
@@ -60,7 +66,9 @@ const HostInventory: React.FC<{ cluster: Cluster }> = ({ cluster }) => {
   return (
     <Stack hasGutter>
       <StackItem>
-        <ClusterWizardStepHeader cluster={cluster}>Host discovery</ClusterWizardStepHeader>
+        <ClusterWizardStepHeader extraItems={<ClusterWizardHeaderExtraActions cluster={cluster} />}>
+          Host discovery
+        </ClusterWizardStepHeader>
       </StackItem>
       <StackItem>
         <TextContent>

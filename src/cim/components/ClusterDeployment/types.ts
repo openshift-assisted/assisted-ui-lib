@@ -1,8 +1,6 @@
-import { Cluster } from '../../api';
-import { OpenshiftVersionOptionType } from '../../types';
-import { NetworkConfigurationValues } from '../../types/clusters';
-import { ClusterDetailsValues } from '../clusterWizard/types';
-import { HostsTableProps } from '../hosts/HostsTable';
+import { Cluster, HostsTableProps, OpenshiftVersionOptionType } from '../../../common';
+import { ClusterDetailsValues } from '../../../common/components/clusterWizard/types';
+import { NetworkConfigurationValues } from '../../../common/types/clusters';
 
 export type ClusterDeploymentHostsTablePropsActions = Pick<
   HostsTableProps,

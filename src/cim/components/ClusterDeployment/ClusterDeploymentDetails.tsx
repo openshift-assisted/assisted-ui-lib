@@ -1,9 +1,11 @@
 import React from 'react';
 import { Grid, GridItem } from '@patternfly/react-core';
-import ClusterDetailsFormFields from '../clusterWizard/ClusterDetailsFormFields';
-import ClusterWizardStepHeader from '../clusterWizard/ClusterWizardStepHeader';
-import { OpenshiftVersionOptionType } from '../../types';
-import { Cluster } from '../../api';
+import {
+  OpenshiftVersionOptionType,
+  Cluster,
+  ClusterDetailsFormFields,
+  ClusterWizardStepHeader,
+} from '../../../common';
 
 const ClusterDeploymentDetails: React.FC<{
   defaultPullSecret: string;
@@ -20,9 +22,7 @@ const ClusterDeploymentDetails: React.FC<{
   return (
     <Grid hasGutter>
       <GridItem>
-        <ClusterWizardStepHeader cluster={undefined /* Intentional to hide Events */}>
-          Cluster Details
-        </ClusterWizardStepHeader>
+        <ClusterWizardStepHeader>Cluster Details</ClusterWizardStepHeader>
       </GridItem>
       <GridItem span={12} lg={10} xl={9} xl2={7}>
         <ClusterDetailsFormFields
@@ -34,6 +34,7 @@ const ClusterDeploymentDetails: React.FC<{
           isNameDisabled={isEditFlow}
           isBaseDnsDomainDisabled={isEditFlow}
           forceOpenshiftVersion={cluster?.openshiftVersion}
+          isOcm={false}
         />
       </GridItem>
     </Grid>

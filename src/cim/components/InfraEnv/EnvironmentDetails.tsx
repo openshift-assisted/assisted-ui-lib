@@ -13,7 +13,7 @@ import { CheckCircleIcon, CrossIcon } from '@patternfly/react-icons';
 import { global_palette_green_500 as okColor } from '@patternfly/react-tokens/dist/js/global_palette_green_500';
 import { global_warning_color_100 as warningColor } from '@patternfly/react-tokens/dist/js/global_warning_color_100';
 
-import { LabelValue } from '../ui/formik/LabelField';
+import { LabelValue } from '../../../common';
 
 type EnvironmentDetailsProps = {
   title: string;

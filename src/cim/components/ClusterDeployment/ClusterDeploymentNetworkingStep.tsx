@@ -1,9 +1,13 @@
 import React from 'react';
 import { Formik } from 'formik';
 
-import { getFormikErrorFields } from '../ui/formik/utils';
-import { Cluster, ClusterDefaultConfig } from '../../api';
-import { useAlerts } from '../AlertsContextProvider';
+import {
+  getFormikErrorFields,
+  Cluster,
+  ClusterDefaultConfig,
+  useAlerts,
+  CLUSTER_DEFAULT_NETWORK_SETTINGS_IPV4,
+} from '../../../common';
 
 import {
   ClusterDeploymentDetailsNetworkingProps,
@@ -13,13 +17,12 @@ import ClusterDeploymentWizardFooter from './ClusterDeploymentWizardFooter';
 import ClusterDeploymentWizardNavigation from './ClusterDeploymentWizardNavigation';
 import ClusterDeploymentWizardStep from './ClusterDeploymentWizardStep';
 import ClusterDeploymentNetworking from './ClusterDeploymentNetworking';
+import { HostSubnets, NetworkConfigurationValues } from '../../../common/types/clusters';
+import { getHostSubnets } from '../../../common/components/clusterConfiguration/utils';
 import {
   getNetworkConfigurationValidationSchema,
   getNetworkInitialValues,
-} from '../clusterConfiguration/networkConfigurationValidation';
-import { HostSubnets, NetworkConfigurationValues } from '../../types/clusters';
-import { CLUSTER_DEFAULT_NETWORK_SETTINGS_IPV4 } from '../../config';
-import { getHostSubnets } from '../clusterConfiguration/utils';
+} from '../../../common/components/clusterConfiguration';
 
 const getInitialValues = ({
   cluster,

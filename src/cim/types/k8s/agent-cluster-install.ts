@@ -1,6 +1,6 @@
 import { K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
-import { Cluster } from '../../../api/types';
-import { StatusCondition } from './common';
+import { Cluster } from '../../../common';
+import { StatusCondition } from './shared';
 
 export type AgentClusterInstallStatusConditionType =
   | 'SpecSynced'

@@ -1,43 +1,43 @@
-import { expandable, ICell, IRowData, sortable } from '@patternfly/react-table';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import {
-  Cluster,
-  ClusterUpdateParams,
-  Host,
-  HostRoleUpdateParams,
-  Inventory,
-} from '../../../common';
-import { forceReload, updateCluster, updateHost } from '../../reducers/clusters';
-import { WithTestID } from '../../../common';
-import { AlertsContext } from '../AlertsContextProvider';
-import {
-  HostsNotShowingLink,
-  HostsNotShowingLinkProps,
-} from '../clusterConfiguration/DiscoveryTroubleshootingModal';
-import HostsTable, { HostsTableProps } from './HostsTable';
-import { useModalDialogsContext } from './ModalDialogsContext';
-import { EmptyState } from '../ui/uiState';
 import { ConnectedIcon } from '@patternfly/react-icons';
+import { expandable, IRowData, sortable } from '@patternfly/react-table';
 import { DiscoveryImageModalButton } from '../clusterConfiguration/discoveryImageModal';
 import {
   canEditDisks as canEditDisksUtil,
   canEditRole as canEditRoleUtil,
   canInstallHost as canInstallHostUtil,
-  downloadHostInstallationLogs,
   canEnable as canEnableUtil,
   canDisable as canDisableUtil,
   canDelete as canDeleteUtil,
   canEditHost as canEditHostUtil,
   canDownloadHostLogs,
   canReset as canResetUtil,
-} from './utils';
-import EditHostModal from './EditHostModal';
+  HostsTable,
+} from '../../../common/components/hosts';
+import {
+  AlertsContext,
+  Cluster,
+  ClusterHostsTableProps,
+  ClusterUpdateParams,
+  Disk,
+  DiskConfigParams,
+  DiskRole,
+  EmptyState,
+  Host,
+  HostRoleUpdateParams,
+  Inventory,
+  WithTestID,
+  HostsNotShowingLink,
+  HostsNotShowingLinkProps,
+  HostsCount,
+} from '../../../common';
+import { forceReload, updateCluster, updateHost } from '../../reducers/clusters';
 import { EventsModal } from '../ui/eventsModal';
+import { useModalDialogsContext } from './ModalDialogsContext';
+import EditHostModal from './EditHostModal';
 import ResetHostModal from './ResetHostModal';
 import DeleteHostModal from './DeleteHostModal';
-import { AdditionalNTPSourcesDialog } from './AdditionalNTPSourcesDialog';
-import HostsCount from './HostsCount';
 import { HostUpdateParams } from './EditHostForm';
 import {
   deleteClusterHost,
@@ -49,6 +49,10 @@ import {
   patchCluster,
   resetClusterHost,
 } from '../../api';
+import { downloadHostInstallationLogs, onAdditionalNtpSourceAction } from './utils';
+import { ValidationInfoActionProps } from '../../../common/components/hosts/HostValidationGroups';
+import { AdditionalNTPSourcesDialog } from '../../../common/components/hosts/AdditionalNTPSourcesDialog';
+import { AdditionalNTPSourcesDialogToggle } from './AdditionaNTPSourceDialogToggle';
 
 type HostsTableEmptyStateProps = {
   cluster: Cluster;
@@ -74,14 +78,6 @@ const HostsTableEmptyState: React.FC<HostsTableEmptyStateProps> = ({
     }
   />
 );
-
-export type ClusterHostsTableProps = {
-  cluster: Cluster;
-  columns?: (string | ICell)[];
-  hostToHostTableRow?: HostsTableProps['hostToHostTableRow'];
-  skipDisabled?: boolean;
-  setDiscoveryHintModalOpen?: HostsNotShowingLinkProps['setDiscoveryHintModalOpen'];
-};
 
 const ClusterHostsTable: React.FC<ClusterHostsTableProps & WithTestID> = ({
   columns,
@@ -174,6 +170,26 @@ const ClusterHostsTable: React.FC<ClusterHostsTableProps & WithTestID> = ({
       downloadHostInstallationLogs(addAlert, rowData.host),
     [addAlert],
   );
+
+  const onDiskRole = async (hostId: Host['id'], diskId: Disk['id'], role: DiskRole) => {
+    const params: ClusterUpdateParams = {};
+    params.disksSelectedConfig = [
+      { id: hostId, disksConfig: [{ id: diskId, role } as DiskConfigParams] },
+    ];
+
+    try {
+      const { data } = await patchCluster(cluster.id, params);
+      dispatch(updateCluster(data));
+    } catch (e) {
+      handleApiError(e, () =>
+        addAlert({ title: 'Failed to set disk role', message: getErrorMessage(e) }),
+      );
+    }
+  };
+
+  const onAdditionalNtpSource: ValidationInfoActionProps['onAdditionalNtpSource'] = async (
+    ...args
+  ) => await onAdditionalNtpSourceAction(dispatch, cluster.id, ...args);
 
   const EmptyState = React.useCallback(
     () => (
@@ -283,6 +299,9 @@ const ClusterHostsTable: React.FC<ClusterHostsTableProps & WithTestID> = ({
         hostToHostTableRow={hostToHostTableRow}
         canDownloadHostLogs={canDownloadHostLogs}
         onEditRole={onEditRole}
+        onDiskRole={onDiskRole}
+        onAdditionalNtpSource={onAdditionalNtpSource}
+        AdditionalNTPSourcesDialogToggleComponent={AdditionalNTPSourcesDialogToggle}
       />
       <EventsModal
         title={`Host Events${eventsDialog.isOpen ? `: ${eventsDialog.data?.hostname}` : ''}`}
@@ -308,7 +327,9 @@ const ClusterHostsTable: React.FC<ClusterHostsTableProps & WithTestID> = ({
         host={editHostDialog.data?.host}
         inventory={editHostDialog.data?.inventory}
         usedHostnames={
-          cluster?.hosts?.map((h) => h.requestedHostname).filter((h) => h) as string[] | undefined
+          cluster?.hosts?.map((h: Host) => h.requestedHostname).filter((h) => h) as
+            | string[]
+            | undefined
         }
         onClose={editHostDialog.close}
         isOpen={editHostDialog.isOpen}
@@ -331,6 +352,7 @@ const ClusterHostsTable: React.FC<ClusterHostsTableProps & WithTestID> = ({
         cluster={cluster}
         isOpen={additionalNTPSourcesDialog.isOpen}
         onClose={additionalNTPSourcesDialog.close}
+        onAdditionalNtpSource={onAdditionalNtpSource}
       />
     </>
   );

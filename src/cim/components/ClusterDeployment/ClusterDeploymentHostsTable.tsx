@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { ICell } from '@patternfly/react-table';
 import { ConnectedIcon } from '@patternfly/react-icons';
-import { Cluster } from '../../api';
-import { WithTestID } from '../../types';
-import HostsTable, { HostsTableProps } from '../hosts/HostsTable';
-import { EmptyState } from '../ui/uiState';
+import { WithTestID, Cluster, EmptyState, HostsTableProps, HostsTable } from '../../../common';
 import { ClusterDeploymentHostsTablePropsActions } from './types';
 
 const HostsTableEmptyState: React.FC<{}> = () => (
@@ -64,6 +61,10 @@ const ClusterDeploymentHostsTable: React.FC<ClusterDeploymentHostsTableProps> = 
         hostToHostTableRow={hostToHostTableRow}
         hosts={cluster.hosts}
         EmptyState={HostsTableEmptyState}
+        onAdditionalNtpSource={async () =>
+          console.info('TODO: ClusterDeploymentHostsTable, onAdditionalNtpSource')
+        }
+        AdditionalNTPSourcesDialogToggleComponent={() => null}
       />
     </>
   );

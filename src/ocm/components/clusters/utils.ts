@@ -6,8 +6,6 @@ import {
   OperatorCreateParams,
 } from '../../../common';
 
-export const isSingleNodeCluster = (cluster: Cluster) => cluster.highAvailabilityMode === 'None';
-
 // The Day2 cluster
 export const isAddHostsCluster = (cluster: Cluster) => cluster.kind === 'AddHostsCluster';
 

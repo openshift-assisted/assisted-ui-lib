@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { AgentK8sResource } from '../../types/k8s/agent';
-import { Cluster as AICluster, Host as AIHost, Inventory } from '../../../api/types';
+import { Cluster, Host, Inventory } from '../../../common';
 import { getAgentStatus, getClusterStatus } from './status';
 import { ClusterDeploymentK8sResource } from '../../types/k8s/cluster-deployment';
 import { AgentClusterInstallK8sResource } from '../../types/k8s/agent-cluster-install';
@@ -8,7 +8,7 @@ import { getHostNetworks } from './network';
 
 export const getAIHosts = (agents: AgentK8sResource[] = []) =>
   agents.map(
-    (agent): AIHost => {
+    (agent): Host => {
       const [status, statusInfo] = getAgentStatus(agent);
       // TODO(mlibra) Remove that workaround once https://issues.redhat.com/browse/MGMT-7052 is fixed
       const inventory: Inventory = _.cloneDeep(agent.status?.inventory || {});
@@ -67,9 +67,9 @@ export const getAICluster = ({
   agentClusterInstall?: AgentClusterInstallK8sResource;
   agents?: AgentK8sResource[];
   pullSecretSet?: boolean;
-}): AICluster => {
+}): Cluster => {
   const [status, statusInfo] = getClusterStatus(agentClusterInstall);
-  const aiCluster: AICluster = {
+  const aiCluster: Cluster = {
     id: clusterDeployment.metadata?.uid || '',
     kind: 'Cluster',
     href: '',

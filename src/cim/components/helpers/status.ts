@@ -3,13 +3,13 @@ import {
   AgentClusterInstallStatusCondition,
   AgentClusterInstallStatusConditionType,
 } from '../../types/k8s/agent-cluster-install';
-import { Cluster as AICluster, Host as AIHost } from '../../../api/types';
+import { Cluster, Host } from '../../../common';
 import {
   AgentK8sResource,
   AgentStatusCondition,
   AgentStatusConditionType,
 } from '../../types/k8s/agent';
-import { StatusCondition } from '../../types/k8s/common';
+import { StatusCondition } from '../../types';
 
 const conditionsByTypeReducer = <K>(
   result: { K?: StatusCondition<string> },
@@ -21,7 +21,7 @@ const conditionsByTypeReducer = <K>(
 
 export const getClusterStatusFromConditions = (
   agentClusterInstall: AgentClusterInstallK8sResource,
-): [AICluster['status'], string] => {
+): [Cluster['status'], string] => {
   const conditions = agentClusterInstall?.status?.conditions || [];
 
   const conditionsByType: {
@@ -64,14 +64,12 @@ export const getClusterStatusFromConditions = (
 
 export const getClusterStatus = (
   agentClusterInstall?: AgentClusterInstallK8sResource,
-): [AICluster['status'], AICluster['statusInfo']] => {
+): [Cluster['status'], Cluster['statusInfo']] => {
   const { state: status, stateInfo: statusInfo } = agentClusterInstall?.status?.debugInfo || {};
   return [status || 'insufficient', statusInfo || ''];
 };
 
-export const getAgentStatusFromConditions = (
-  agent: AgentK8sResource,
-): [AIHost['status'], string] => {
+export const getAgentStatusFromConditions = (agent: AgentK8sResource): [Host['status'], string] => {
   const conditions = agent.status?.conditions;
 
   const conditionsByType: {
@@ -99,9 +97,7 @@ export const getAgentStatusFromConditions = (
   return ['insufficient', 'Unexpected Agent conditions.'];
 };
 
-export const getAgentStatus = (
-  agent: AgentK8sResource,
-): [AIHost['status'], AIHost['statusInfo']] => [
+export const getAgentStatus = (agent: AgentK8sResource): [Host['status'], Host['statusInfo']] => [
   agent.status?.debugInfo?.state || 'insufficient',
   agent.status?.debugInfo?.stateInfo || '',
 ];

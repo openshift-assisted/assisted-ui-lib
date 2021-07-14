@@ -1,16 +1,24 @@
 import React from 'react';
 import _ from 'lodash';
 import { Formik, FormikHelpers } from 'formik';
-import { Cluster, ClusterCreateParams, ClusterUpdateParams, ManagedDomain } from '../../../common';
-import ClusterWizardStep from './ClusterWizardStep';
+import {
+  Cluster,
+  ClusterCreateParams,
+  ClusterUpdateParams,
+  ManagedDomain,
+  ClusterWizardStep,
+  ClusterWizardStepHeader,
+  ClusterDetailsValues,
+  getClusterDetailsInitialValues,
+  getClusterDetailsValidationSchema,
+  ClusterDetailsFormFields,
+} from '../../../common';
 import { Grid, GridItem } from '@patternfly/react-core';
 import { canNextClusterDetails } from './wizardTransition';
 import { OpenshiftVersionOptionType, getFormikErrorFields } from '../../../common';
-import ClusterWizardStepHeader from './ClusterWizardStepHeader';
 import ClusterWizardFooter from './ClusterWizardFooter';
-import ClusterDetailsFormFields from './ClusterDetailsFormFields';
-import { ClusterDetailsValues } from './types';
-import { getClusterDetailsInitialValues, getClusterDetailsValidationSchema } from './utils';
+import ClusterWizardHeaderExtraActions from '../clusterConfiguration/ClusterWizardHeaderExtraActions';
+import { ocmClient } from '../../api';
 
 type ClusterDetailsFormProps = {
   cluster?: Cluster;
@@ -80,7 +88,11 @@ const ClusterDetailsForm: React.FC<ClusterDetailsFormProps> = (props) => {
           <>
             <Grid hasGutter>
               <GridItem>
-                <ClusterWizardStepHeader cluster={cluster}>Cluster details</ClusterWizardStepHeader>
+                <ClusterWizardStepHeader
+                  extraItems={<ClusterWizardHeaderExtraActions cluster={cluster} />}
+                >
+                  Cluster details
+                </ClusterWizardStepHeader>
               </GridItem>
               <GridItem span={12} lg={10} xl={9} xl2={7}>
                 <ClusterDetailsFormFields
@@ -90,6 +102,7 @@ const ClusterDetailsForm: React.FC<ClusterDetailsFormProps> = (props) => {
                   forceOpenshiftVersion={cluster?.openshiftVersion}
                   isSNOGroupDisabled={!!cluster}
                   defaultPullSecret={pullSecret}
+                  isOcm={!!ocmClient}
                 />
               </GridItem>
             </Grid>

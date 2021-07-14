@@ -1,16 +1,20 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { ButtonVariant, Grid, GridItem } from '@patternfly/react-core';
-import { Cluster, ToolbarButton } from '../../../common';
-import ClusterWizardStep from '../clusterWizard/ClusterWizardStep';
-import { useAlerts } from '../AlertsContextProvider';
+import {
+  Cluster,
+  ToolbarButton,
+  ClusterWizardStepHeader,
+  useAlerts,
+  ClusterWizardStep,
+} from '../../../common';
 import ClusterWizardContext from '../clusterWizard/ClusterWizardContext';
 import { getErrorMessage, handleApiError, postInstallCluster } from '../../api';
 import { updateCluster } from '../../reducers/clusters/currentClusterSlice';
-import ClusterWizardStepHeader from '../clusterWizard/ClusterWizardStepHeader';
 import ClusterWizardFooter from '../clusterWizard/ClusterWizardFooter';
 import ClusterWizardNavigation from '../clusterWizard/ClusterWizardNavigation';
 import ReviewCluster from './ReviewCluster';
+import ClusterWizardHeaderExtraActions from './ClusterWizardHeaderExtraActions';
 
 const ReviewStep: React.FC<{ cluster: Cluster }> = ({ cluster }) => {
   const { addAlert } = useAlerts();
@@ -60,7 +64,11 @@ const ReviewStep: React.FC<{ cluster: Cluster }> = ({ cluster }) => {
     <ClusterWizardStep navigation={<ClusterWizardNavigation cluster={cluster} />} footer={footer}>
       <Grid hasGutter>
         <GridItem>
-          <ClusterWizardStepHeader cluster={cluster}>Review and create</ClusterWizardStepHeader>
+          <ClusterWizardStepHeader
+            extraItems={<ClusterWizardHeaderExtraActions cluster={cluster} />}
+          >
+            Review and create
+          </ClusterWizardStepHeader>
         </GridItem>
         <GridItem>
           <ReviewCluster cluster={cluster} />

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Formik } from 'formik';
 
-import { getFormikErrorFields } from '../ui/formik/utils';
 import {
+  Cluster,
+  useAlerts,
+  OpenshiftVersionOptionType,
+  getFormikErrorFields,
   getClusterDetailsInitialValues,
   getClusterDetailsValidationSchema,
-} from '../clusterWizard/utils';
-import { Cluster } from '../../api';
-import { OpenshiftVersionOptionType } from '../../types';
-import { useAlerts } from '../AlertsContextProvider';
+} from '../../../common';
 
 import ClusterDeploymentDetails from './ClusterDeploymentDetails';
 import { ClusterDeploymentDetailsStepProps, ClusterDeploymentDetailsValues } from './types';

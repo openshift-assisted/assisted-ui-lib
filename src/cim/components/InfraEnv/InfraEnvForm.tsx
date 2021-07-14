@@ -16,16 +16,16 @@ import {
 } from '@patternfly/react-core';
 import { Formik, FormikProps } from 'formik';
 
-import ProxyFields from '../clusterConfiguration/ProxyFields';
-import UploadSSH from '../clusterConfiguration/UploadSSH';
-import { InputField } from '../ui';
-import LabelField from '../ui/formik/LabelField';
-import PullSecretField from '../ui/formik/PullSecretField';
 import {
   httpProxyValidationSchema,
+  InputField,
   noProxyValidationSchema,
+  PullSecretField,
   sshPublicKeyValidationSchema,
-} from '../ui/formik/validationSchemas';
+  LabelField,
+  UploadSSH,
+  ProxyFields,
+} from '../../../common';
 
 export type EnvironmentStepFormValues = {
   name: string;
@@ -130,7 +130,7 @@ const InfraEnvForm: React.FC<InfraEnvFormProps> = ({ usedNames, onSubmit, onClos
                   <InputField label="Base domain" name="baseDomain" isRequired />
                   <InputField label="Location" name="location" isRequired />
                   <LabelField label="Labels" name="labels" isRequired />
-                  <PullSecretField />
+                  <PullSecretField isOcm={false} />
                   <UploadSSH />
                   <ProxyFields />
                 </Form>

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { AlertsContextProvider } from '../AlertsContextProvider';
 import { ClusterDeploymentWizardProps, ClusterDeploymentWizardStepsType } from './types';
 import ClusterDeploymentWizardContext from './ClusterDeploymentWizardContext';
 import ClusterDeploymentDetailsStep from './ClusterDeploymentDetailsStep';
 import ClusterDeploymentNetworkingStep from './ClusterDeploymentNetworkingStep';
+import { AlertsContextProvider } from '../../../common';
 
 const ClusterDeploymentWizard: React.FC<ClusterDeploymentWizardProps> = ({
   className = '',
@@ -14,6 +14,8 @@ const ClusterDeploymentWizard: React.FC<ClusterDeploymentWizardProps> = ({
   canEditHost,
   onEditRole,
   canEditRole,
+  onDeleteHost,
+  canDelete,
   cluster,
   ocpVersions,
   defaultPullSecret,
@@ -35,6 +37,8 @@ const ClusterDeploymentWizard: React.FC<ClusterDeploymentWizardProps> = ({
               canEditHost={canEditHost}
               onEditRole={onEditRole}
               canEditRole={canEditRole}
+              onDeleteHost={onDeleteHost}
+              canDelete={canDelete}
               // TODO(mlibra) Add more networking-table actions here
             />
           );
@@ -68,6 +72,8 @@ const ClusterDeploymentWizard: React.FC<ClusterDeploymentWizardProps> = ({
     canEditHost,
     onEditRole,
     canEditRole,
+    onDeleteHost,
+    canDelete,
   ]);
 
   return (

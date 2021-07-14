@@ -1,24 +1,32 @@
 import React from 'react';
-import { Cluster, Inventory, stringToJSON } from '../../../common';
+import {
+  Cluster,
+  getDateTimeCell,
+  getHostname,
+  getHostRole,
+  HostsNotShowingLinkProps,
+  HostsTableProps,
+  Inventory,
+  RoleCell,
+  stringToJSON,
+} from '../../../common';
 import { ClusterHostsTable } from '.';
-import { HostDetail } from './HostRowDetail';
-import HostPropertyValidationPopover from './HostPropertyValidationPopover';
-import { HostsTableProps } from './HostsTable';
-import { getHostRowHardwareInfo } from './hardwareInfo';
 import { ValidationsInfo } from '../../../common/types/hosts';
-import { getHostname, getHostRole } from './utils';
-import Hostname from './Hostname';
-import RoleCell from './RoleCell';
 import HardwareStatus from './HardwareStatus';
-import { getDateTimeCell } from '../ui/table/utils';
-import { HostsNotShowingLinkProps } from '../clusterConfiguration/DiscoveryTroubleshootingModal';
+import Hostname from '../../../common/components/hosts/Hostname';
+import { getHostRowHardwareInfo } from '../../../common/components/hosts/hardwareInfo';
+import HostPropertyValidationPopover from '../../../common/components/hosts/HostPropertyValidationPopover';
+import { HostDetail } from '../../../common/components/hosts/HostRowDetail';
 
 const hostToHostTableRow: HostsTableProps['hostToHostTableRow'] = (
   openRows,
+  onAdditionalNtpSource,
+  AdditionalNTPSourcesDialogToggleComponent,
   canEditDisks,
   onEditHostname,
   canEditRole,
   onEditRole,
+  onDiskRole,
 ) => (host) => {
   const { id, status, createdAt, inventory: inventoryString = '' } = host;
   const inventory = stringToJSON<Inventory>(inventoryString) || {};
@@ -116,9 +124,11 @@ const hostToHostTableRow: HostsTableProps['hostToHostTableRow'] = (
             <HostDetail
               key={id}
               canEditDisks={canEditDisks}
+              onDiskRole={onDiskRole}
               inventory={inventory}
               host={host}
               validationsInfo={validationsInfo}
+              AdditionalNTPSourcesDialogToggleComponent={AdditionalNTPSourcesDialogToggleComponent}
             />
           ),
         },

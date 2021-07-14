@@ -1,4 +1,4 @@
-import ClusterWizardStep from '../clusterWizard/ClusterWizardStep';
+import { ClusterWizardStep } from '../../../common/components/clusterWizard';
 
 const ClusterDeploymentWizardStep = ClusterWizardStep;
 

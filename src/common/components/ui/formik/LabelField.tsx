@@ -24,7 +24,7 @@ type LabelFieldProps = InputFieldProps & {
   onChange?: (tags: any[]) => void;
 };
 
-const LabelField: React.FC<LabelFieldProps> = ({
+export const LabelField: React.FC<LabelFieldProps> = ({
   label,
   labelIcon,
   helperText,
@@ -89,5 +89,3 @@ const LabelField: React.FC<LabelFieldProps> = ({
     </FormGroup>
   );
 };
-
-export default LabelField;

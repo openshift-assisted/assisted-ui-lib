@@ -1,6 +1,6 @@
 import React from 'react';
 import { WizardNav } from '@patternfly/react-core';
-import WizardNavItem from '../ui/WizardNavItem';
+import { WizardNavItem } from '../../../common';
 import { wizardStepNames } from './constants';
 import ClusterDeploymentWizardContext from './ClusterDeploymentWizardContext';
 import { ClusterDeploymentWizardStepsType } from './types';

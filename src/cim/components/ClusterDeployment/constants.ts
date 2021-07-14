@@ -1,4 +1,4 @@
-import { CLUSTER_FIELD_LABELS } from '../../config';
+import { CLUSTER_FIELD_LABELS } from '../../../common';
 import { ClusterDeploymentWizardStepsType } from './types';
 
 export const CLUSTER_DEPLOYMENT_FIELD_LABELS: { [key in string]: string } = {

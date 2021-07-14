@@ -1,9 +1,6 @@
 import React from 'react';
-import Alerts from '../ui/Alerts';
-import { useAlerts } from '../AlertsContextProvider';
-import { WizardFooter } from '../ui';
-import { WizardFooterGenericProps } from '../ui/WizardFooter';
 import { Alert, AlertGroup, AlertVariant } from '@patternfly/react-core';
+import { Alerts, WizardFooter, useAlerts, WizardFooterGenericProps } from '../../../common';
 import { CLUSTER_DEPLOYMENT_FIELD_LABELS } from './constants';
 
 type ClusterDeploymentWizardFooterProps = WizardFooterGenericProps & {
