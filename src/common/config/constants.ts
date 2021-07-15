@@ -1,13 +1,7 @@
 import * as packageJson from '../../../package.json';
-import {
-  Cluster,
-  Host,
-  Event,
-  HostValidationId,
-  DiskRole,
-  ClusterValidationId,
-} from '../../common';
+
 import { ValidationsInfo, HostRole } from '../../common/types/hosts';
+import { Cluster, ClusterValidationId, DiskRole, Event, Host, HostValidationId } from '../api';
 
 export const OPENSHIFT_NETWORKING_DOCS_LINK =
   'https://docs.openshift.com/container-platform/4.7/installing/installing_bare_metal/installing-bare-metal.html#installation-network-user-infra_installing-bare-metal';

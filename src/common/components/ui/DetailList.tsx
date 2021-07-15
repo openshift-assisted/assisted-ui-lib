@@ -8,9 +8,9 @@ import {
   Text,
   TextProps,
 } from '@patternfly/react-core';
+import { WithTestID } from '../../types';
 
 import './DetailList.css';
-import { WithTestID } from '../../../common';
 
 export type DetailListProps = {
   children: ReactChild | (ReactChild | undefined)[];

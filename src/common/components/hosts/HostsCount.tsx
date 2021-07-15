@@ -1,6 +1,6 @@
 import React from 'react';
 import { Popover, Level, LevelItem } from '@patternfly/react-core';
-import { Cluster } from '../../../common';
+import { Cluster } from '../../api';
 import { getEnabledHostCount, getReadyHostCount, getTotalHostCount } from './utils';
 
 type HostsCountProps = {

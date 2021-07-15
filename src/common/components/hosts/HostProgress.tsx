@@ -1,11 +1,11 @@
 import React from 'react';
-import { Host } from '../../../common';
 import {
   Progress,
   ProgressVariant,
   ProgressMeasureLocation,
   ProgressSize,
 } from '@patternfly/react-core';
+import { Host } from '../../api';
 import { getHostProgress, getHostProgressStages, getHostProgressStageNumber } from './utils';
 
 const getProgressVariant = (status: Host['status']) => {

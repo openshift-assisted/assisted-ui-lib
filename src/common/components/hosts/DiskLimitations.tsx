@@ -8,7 +8,7 @@ import {
   ListItem,
   Popover,
 } from '@patternfly/react-core';
-import { Disk } from '../../../common';
+import { Disk } from '../../api';
 
 type DiskLimitationsProps = {
   disk: Disk;

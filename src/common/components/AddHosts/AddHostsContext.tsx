@@ -1,5 +1,5 @@
 import React from 'react';
-import { Cluster } from '../../../common';
+import { Cluster } from '../../api';
 
 export type AddHostsContextType = {
   cluster?: Cluster;
