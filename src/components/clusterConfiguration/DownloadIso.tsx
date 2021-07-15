@@ -18,8 +18,8 @@ import { CheckCircleIcon } from '@patternfly/react-icons';
 import { DetailList, DetailItem } from '../ui/DetailList';
 
 export type DownloadISOProps = {
-  fileName: string;
-  downloadUrl: string;
+  fileName?: string;
+  downloadUrl?: string;
   onClose: () => void;
   onReset?: () => void;
 };
@@ -74,8 +74,9 @@ const DownloadIso: React.FC<DownloadISOProps> = ({
       <ModalBoxFooter>
         <Button
           variant={ButtonVariant.primary}
-          onClick={() => saveAs(downloadUrl)}
+          onClick={() => downloadUrl && saveAs(downloadUrl)}
           data-testid="download-iso-btn"
+          isDisabled={!downloadUrl}
         >
           Download Discovery ISO
         </Button>
