@@ -19,18 +19,11 @@ import {
   Badge,
 } from '@patternfly/react-core';
 import { SearchIcon, FilterIcon } from '@patternfly/react-icons';
-import { Host, Event, Cluster, Inventory, stringToJSON, EVENT_SEVERITIES } from '../../../common';
+import { ClusterEventsFiltersType } from '../../types';
+import { Cluster, Event, Host, Inventory, stringToJSON } from '../../api';
+import { EVENT_SEVERITIES } from '../../config';
 
 import './ClusterEventsToolbar.css';
-
-export type ClusterEventsFiltersType = {
-  fulltext: string;
-  hosts: Host['id'][];
-  severity: Event['severity'][];
-  clusterLevel: boolean;
-  orphanedHosts: boolean;
-  selectAll: boolean;
-};
 
 type ClustersListToolbarProps = {
   filters: ClusterEventsFiltersType;

@@ -19,8 +19,8 @@ import {
   global_success_color_100 as okColor,
 } from '@patternfly/react-tokens';
 import { pluralize } from 'humanize-plus';
-
-import { MonitoredOperatorsList, OperatorStatus, OPERATOR_LABELS } from '../../../common';
+import { MonitoredOperatorsList, OperatorStatus } from '../../api';
+import { OPERATOR_LABELS } from '../../config';
 
 import './OperatorsProgressItem.css';
 

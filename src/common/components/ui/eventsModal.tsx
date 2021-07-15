@@ -1,10 +1,13 @@
 import React from 'react';
 import { Button, Modal, ButtonVariant, ModalVariant } from '@patternfly/react-core';
-import EventListFetch, { EventsEntityKind } from '../fetching/EventListFetch';
-import { Event, Cluster, ToolbarButton } from '../../../common';
+import { ToolbarButton } from './Toolbar';
+import { Cluster, Event } from '../../api';
+import { EventListFetchProps, EventsEntityKind } from '../../types';
+import { EventListFetch } from '../fetching/EventListFetch';
 
 type EventsModalButtonProps = React.ComponentProps<typeof Button> & {
   ButtonComponent?: typeof Button | typeof ToolbarButton;
+  onFetchEvents: EventListFetchProps['onFetchEvents'];
   onClick?: () => void;
   hostId?: Event['hostId'];
   cluster: Cluster;
@@ -14,6 +17,7 @@ type EventsModalButtonProps = React.ComponentProps<typeof Button> & {
 
 export const EventsModalButton: React.FC<EventsModalButtonProps> = ({
   ButtonComponent = ToolbarButton,
+  onFetchEvents,
   onClick,
   hostId,
   cluster,
@@ -37,12 +41,14 @@ export const EventsModalButton: React.FC<EventsModalButtonProps> = ({
         hostId={hostId}
         cluster={cluster}
         entityKind={entityKind}
+        onFetchEvents={onFetchEvents}
       />
     </>
   );
 };
 
 type EventsModalProps = {
+  onFetchEvents: EventListFetchProps['onFetchEvents'];
   hostId: Event['hostId'];
   cluster: Cluster;
   entityKind: EventsEntityKind;
@@ -52,6 +58,7 @@ type EventsModalProps = {
 };
 
 export const EventsModal: React.FC<EventsModalProps> = ({
+  onFetchEvents,
   hostId,
   cluster,
   entityKind,
@@ -72,7 +79,12 @@ export const EventsModal: React.FC<EventsModalProps> = ({
       variant={ModalVariant.large}
       className="events-modal"
     >
-      <EventListFetch hostId={hostId} cluster={cluster} entityKind={entityKind} />
+      <EventListFetch
+        hostId={hostId}
+        cluster={cluster}
+        entityKind={entityKind}
+        onFetchEvents={onFetchEvents}
+      />
     </Modal>
   );
 };

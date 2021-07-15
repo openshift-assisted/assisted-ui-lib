@@ -22,26 +22,16 @@ import {
   InProgressIcon,
   PendingIcon,
 } from '@patternfly/react-icons';
-
-import {
-  Cluster,
-  Host,
-  HostRole,
-  MonitoredOperatorsList,
-  getHumanizedDateTime,
-  CLUSTER_STATUS_LABELS,
-  DetailList,
-  DetailItem,
-  getHostProgressStages,
-  getHostProgressStageNumber,
-  getEnabledHosts,
-  RenderIf,
-} from '../../../common';
-import { EventsModal } from '../ui/eventsModal';
+import { Cluster, Host, HostRole, MonitoredOperatorsList } from '../../api';
+import { getEnabledHosts, getHostProgressStageNumber, getHostProgressStages } from '../hosts';
+import { DetailItem, DetailList, getHumanizedDateTime, RenderIf } from '../ui';
+import { CLUSTER_STATUS_LABELS } from '../../config';
 import OperatorsProgressItem from './OperatorsProgressItem';
-import { getOlmOperators } from '../clusters/utils';
+import { EventsModal } from '../ui/eventsModal';
+import { getOlmOperators } from './utils';
 
 import './ClusterProgress.css';
+import { EventListFetchProps } from '../../types';
 
 const getProgressVariant = (status: Cluster['status']) => {
   switch (status) {
@@ -178,9 +168,10 @@ const getFinalizingStatusIcon = (cluster: Cluster) => {
 
 type FinalizingProgressProps = {
   cluster: Cluster;
+  onFetchEvents: EventListFetchProps['onFetchEvents'];
 };
 
-const FinalizingProgress = ({ cluster }: FinalizingProgressProps) => {
+const FinalizingProgress = ({ cluster, onFetchEvents }: FinalizingProgressProps) => {
   const { status } = cluster;
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const closeModal = () => setIsModalOpen(false);
@@ -193,6 +184,7 @@ const FinalizingProgress = ({ cluster }: FinalizingProgressProps) => {
         hostId={undefined}
         cluster={cluster}
         entityKind="cluster"
+        onFetchEvents={onFetchEvents}
       />
       <Flex className="pf-u-mr-3xl">
         <FlexItem>{getFinalizingStatusIcon(cluster)}</FlexItem>
@@ -230,9 +222,14 @@ const FinalizingProgress = ({ cluster }: FinalizingProgressProps) => {
 type ClusterProgressProps = {
   cluster: Cluster;
   minimizedView?: boolean;
+  onFetchEvents: EventListFetchProps['onFetchEvents'];
 };
 
-const ClusterProgress = ({ cluster, minimizedView = false }: ClusterProgressProps) => {
+const ClusterProgress = ({
+  cluster,
+  minimizedView = false,
+  onFetchEvents,
+}: ClusterProgressProps) => {
   const { status, monitoredOperators = [] } = cluster;
   const hostsProgressPercent = React.useMemo(() => getHostsProgressPercent(cluster.hosts), [
     cluster.hosts,
@@ -288,7 +285,7 @@ const ClusterProgress = ({ cluster, minimizedView = false }: ClusterProgressProp
           </RenderIf>
 
           <FlexItem>
-            <FinalizingProgress cluster={cluster} />
+            <FinalizingProgress cluster={cluster} onFetchEvents={onFetchEvents} />
           </FlexItem>
 
           <RenderIf condition={olmOperators.length > 0}>

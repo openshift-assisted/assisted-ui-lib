@@ -19,11 +19,9 @@ import {
   useAlerts,
   RenderIf,
 } from '../../../common';
-import { EventsModalButton } from '../ui/eventsModal';
 import ClusterHostsTable from '../hosts/ClusterHostsTable';
 import ClusterToolbar from '../clusters/ClusterToolbar';
 import { downloadClusterInstallationLogs, getClusterDetailId } from './utils';
-import ClusterProgress from './ClusterProgress';
 import { LaunchOpenshiftConsoleButton } from './ConsoleModal';
 import KubeconfigDownload from './KubeconfigDownload';
 import ClusterProperties from './ClusterProperties';
@@ -34,6 +32,9 @@ import ClusterDetailStatusVarieties, {
 import { useModalDialogsContext } from '../hosts/ModalDialogsContext';
 import { canAbortInstallation } from '../clusters/utils';
 import { useDefaultConfiguration } from '../clusterConfiguration/ClusterDefaultConfigurationContext';
+import ClusterProgress from '../../../common/components/clusterDetail/ClusterProgress';
+import { EventsModalButton } from '../../../common/components/ui/eventsModal';
+import { onFetchEvents } from '../fetching/fetchEvents';
 
 type ClusterDetailProps = {
   cluster: Cluster;
@@ -57,7 +58,7 @@ const ClusterDetail: React.FC<ClusterDetailProps> = ({ cluster }) => {
             </TextContent>
           </GridItem>
           <GridItem>
-            <ClusterProgress cluster={cluster} />
+            <ClusterProgress cluster={cluster} onFetchEvents={onFetchEvents} />
           </GridItem>
           <ClusterDetailStatusVarieties cluster={cluster} clusterVarieties={clusterVarieties} />
           <KubeconfigDownload
@@ -139,6 +140,7 @@ const ClusterDetail: React.FC<ClusterDetailProps> = ({ cluster }) => {
               cluster={cluster}
               title="Cluster Events"
               variant={ButtonVariant.link}
+              onFetchEvents={onFetchEvents}
             >
               View Cluster Events
             </EventsModalButton>

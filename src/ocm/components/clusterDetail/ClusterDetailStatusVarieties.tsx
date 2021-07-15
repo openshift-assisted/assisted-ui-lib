@@ -1,7 +1,12 @@
 import React from 'react';
 import { GridItem } from '@patternfly/react-core';
-import { Cluster, Credentials, MonitoredOperator, MonitoredOperatorsList } from '../../../common';
-import { getOlmOperators } from '../clusters/utils';
+import {
+  Cluster,
+  Credentials,
+  getOlmOperators,
+  MonitoredOperator,
+  MonitoredOperatorsList,
+} from '../../../common';
 import ClusterCredentials from './ClusterCredentials';
 import ClusterInstallationError from './ClusterInstallationError';
 import FailedHostsWarning from './FailedHostsWarning';

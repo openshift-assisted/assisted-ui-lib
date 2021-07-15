@@ -12,3 +12,4 @@ export type WithTestID = {
 
 export * from './versions';
 export * from './proxyFields';
+export * from './events';

@@ -15,6 +15,7 @@ import {
   canReset as canResetUtil,
   HostsTable,
   EditHostModal,
+  HostUpdateParams,
 } from '../../../common/components/hosts';
 import {
   AlertsContext,
@@ -32,9 +33,9 @@ import {
   HostsNotShowingLink,
   HostsNotShowingLinkProps,
   HostsCount,
+  EventsModal,
 } from '../../../common';
 import { forceReload, updateCluster, updateHost } from '../../reducers/clusters';
-import { EventsModal } from '../ui/eventsModal';
 import { useModalDialogsContext } from './ModalDialogsContext';
 import ResetHostModal from './ResetHostModal';
 import DeleteHostModal from './DeleteHostModal';
@@ -52,7 +53,7 @@ import { downloadHostInstallationLogs, onAdditionalNtpSourceAction } from './uti
 import { ValidationInfoActionProps } from '../../../common/components/hosts/HostValidationGroups';
 import { AdditionalNTPSourcesDialog } from '../../../common/components/hosts/AdditionalNTPSourcesDialog';
 import { AdditionalNTPSourcesDialogToggle } from './AdditionaNTPSourceDialogToggle';
-import { HostUpdateParams } from '../../../common/components/hosts/EditHostForm';
+import { onFetchEvents } from '../fetching/fetchEvents';
 
 type HostsTableEmptyStateProps = {
   cluster: Cluster;
@@ -310,6 +311,7 @@ const ClusterHostsTable: React.FC<ClusterHostsTableProps & WithTestID> = ({
         hostId={eventsDialog.data?.hostId}
         onClose={eventsDialog.close}
         isOpen={eventsDialog.isOpen}
+        onFetchEvents={onFetchEvents}
       />
       <ResetHostModal
         hostname={resetHostDialog.data?.hostname}

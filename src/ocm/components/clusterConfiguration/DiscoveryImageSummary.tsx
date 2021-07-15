@@ -1,7 +1,7 @@
 import React from 'react';
 import { Cluster } from '../../../common';
+import DownloadIso from '../../../common/components/clusterConfiguration/DownloadIso';
 import { getClusterDownloadsImageUrl } from '../../api/clusters';
-import DownloadISO from './DownloadIso';
 
 type DiscoveryImageSummaryProps = {
   cluster: Cluster;
@@ -20,7 +20,7 @@ const DiscoveryImageSummary: React.FC<DiscoveryImageSummaryProps> = ({
   const downloadUrl = imageInfo.downloadUrl || isoUrl;
 
   return (
-    <DownloadISO
+    <DownloadIso
       fileName={`discovery_image_${cluster.name}.iso`}
       downloadUrl={downloadUrl}
       {...restProps}

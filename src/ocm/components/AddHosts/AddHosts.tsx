@@ -20,9 +20,10 @@ import {
   Alerts,
   AddHostsContext,
   alertsSlice,
+  EventsModalButton,
 } from '../../../common';
-import { EventsModalButton } from '../ui/eventsModal';
 import InventoryAddHosts from './InventoryAddHost';
+import { onFetchEvents } from '../fetching/fetchEvents';
 
 const { addAlert } = alertsSlice.actions;
 
@@ -77,6 +78,7 @@ const AddHosts: React.FC = () => {
                   title="Cluster Events"
                   variant={ButtonVariant.link}
                   style={{ textAlign: 'right' }}
+                  onFetchEvents={onFetchEvents}
                 >
                   View Cluster Events
                 </EventsModalButton>

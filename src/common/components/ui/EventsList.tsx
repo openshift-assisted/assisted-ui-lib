@@ -1,5 +1,4 @@
 import React from 'react';
-import { EventList, Event } from '../../../common';
 import { Label } from '@patternfly/react-core';
 import { TableVariant, Table, TableBody, breakWord } from '@patternfly/react-table';
 import {
@@ -9,7 +8,10 @@ import {
   SearchIcon,
 } from '@patternfly/react-icons';
 import { ExtraParamsType } from '@patternfly/react-table/dist/js/components/Table/base';
-import { getHumanizedDateTime, EmptyState, fitContent, noPadding } from '../../../common';
+import { Event, EventList } from '../../api';
+import { EmptyState } from './uiState';
+import { getHumanizedDateTime } from './utils';
+import { fitContent, noPadding } from './table';
 
 const getEventRowKey = ({ rowData }: ExtraParamsType) =>
   rowData?.props?.event.sortableTime + rowData?.props?.event.message;

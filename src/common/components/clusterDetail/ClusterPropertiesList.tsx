@@ -7,7 +7,8 @@ import {
   Grid,
   GridItem,
 } from '@patternfly/react-core';
-import { getHumanizedDateTime, DASH } from '../../../common';
+import { DASH } from '../constants';
+import { getHumanizedDateTime } from '../ui';
 
 type ClusterPropertiesList = {
   name?: string;

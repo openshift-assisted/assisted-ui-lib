@@ -8,14 +8,14 @@ import {
   Grid,
   GridItem,
 } from '@patternfly/react-core';
-import { Cluster } from '../../../common';
-import ClusterProgress from './ClusterProgress';
+import { Cluster, ClusterProgress } from '../../../common';
 import ClusterHostsTable from '../hosts/ClusterHostsTable';
 import ClusterDetailsButtonGroup from './ClusterDetailsButtonGroup';
 import { ClusterStatusIcon } from '../clusters/ClusterStatus';
 import ClusterDetailStatusVarieties, {
   useClusterStatusVarieties,
 } from './ClusterDetailStatusVarieties';
+import { onFetchEvents } from '../fetching/fetchEvents';
 
 const ClusterInstallationProgressCard: React.FC<{ cluster: Cluster }> = ({ cluster }) => {
   const [isCardExpanded, setIsCardExpanded] = React.useState(cluster.status !== 'installed');
@@ -42,7 +42,11 @@ const ClusterInstallationProgressCard: React.FC<{ cluster: Cluster }> = ({ clust
         )}
       </CardHeader>
       <CardBody>
-        <ClusterProgress cluster={cluster} minimizedView={!isCardExpanded} />
+        <ClusterProgress
+          cluster={cluster}
+          minimizedView={!isCardExpanded}
+          onFetchEvents={onFetchEvents}
+        />
         <ClusterDetailsButtonGroup cluster={cluster} />
       </CardBody>
       <CardExpandableContent>
