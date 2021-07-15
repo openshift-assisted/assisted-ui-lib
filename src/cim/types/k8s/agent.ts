@@ -23,7 +23,7 @@ export type AgentK8sResource = K8sResourceCommon & {
     hostname: string;
   };
   status?: {
-    conditions: AgentStatusCondition[];
+    conditions?: AgentStatusCondition[];
     hostValidationInfo: ValidationsInfo;
     inventory: Inventory;
     progress: {
