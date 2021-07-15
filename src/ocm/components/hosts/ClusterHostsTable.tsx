@@ -14,6 +14,7 @@ import {
   canDownloadHostLogs,
   canReset as canResetUtil,
   HostsTable,
+  EditHostModal,
 } from '../../../common/components/hosts';
 import {
   AlertsContext,
@@ -35,10 +36,8 @@ import {
 import { forceReload, updateCluster, updateHost } from '../../reducers/clusters';
 import { EventsModal } from '../ui/eventsModal';
 import { useModalDialogsContext } from './ModalDialogsContext';
-import EditHostModal from './EditHostModal';
 import ResetHostModal from './ResetHostModal';
 import DeleteHostModal from './DeleteHostModal';
-import { HostUpdateParams } from './EditHostForm';
 import {
   deleteClusterHost,
   disableClusterHost,
@@ -53,6 +52,7 @@ import { downloadHostInstallationLogs, onAdditionalNtpSourceAction } from './uti
 import { ValidationInfoActionProps } from '../../../common/components/hosts/HostValidationGroups';
 import { AdditionalNTPSourcesDialog } from '../../../common/components/hosts/AdditionalNTPSourcesDialog';
 import { AdditionalNTPSourcesDialogToggle } from './AdditionaNTPSourceDialogToggle';
+import { HostUpdateParams } from '../../../common/components/hosts/EditHostForm';
 
 type HostsTableEmptyStateProps = {
   cluster: Cluster;
@@ -346,6 +346,12 @@ const ClusterHostsTable: React.FC<ClusterHostsTableProps & WithTestID> = ({
           const { data } = await patchCluster(cluster.id, params);
           dispatch(updateCluster(data));
           editHostDialog.close();
+        }}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onFormSaveError={(e: any) => {
+          let message;
+          handleApiError(e, () => (message = getErrorMessage(e)));
+          return message;
         }}
       />
       <AdditionalNTPSourcesDialog

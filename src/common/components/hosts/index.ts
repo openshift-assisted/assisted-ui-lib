@@ -8,3 +8,4 @@ export { default as RoleDropdown } from './RoleDropdown';
 export { default as NetworkingHostsTable } from './NetworkingHostsTable';
 export { default as HostsCount } from './HostsCount';
 export { default as HostStatus } from './HostStatus';
+export { default as EditHostModal } from './EditHostModal';

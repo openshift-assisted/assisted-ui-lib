@@ -10,3 +10,8 @@ export type ClusterHostsTableProps = {
   skipDisabled?: boolean;
   setDiscoveryHintModalOpen?: HostsNotShowingLinkProps['setDiscoveryHintModalOpen'];
 };
+
+export type HostUpdateParams = {
+  hostId: string; // identifier, uuid
+  hostname: string; // requested change
+};

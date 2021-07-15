@@ -1,7 +1,8 @@
 import React from 'react';
 import { Modal, ModalVariant } from '@patternfly/react-core';
-import { Host, Inventory } from '../../../common';
-import EditHostForm, { HostUpdateParams } from './EditHostForm';
+import { Host, Inventory } from '../../api';
+import EditHostForm, { EditHostFormProps } from './EditHostForm';
+import { HostUpdateParams } from './types';
 
 type EditHostModalProps = {
   host?: Host;
@@ -11,6 +12,7 @@ type EditHostModalProps = {
   onClose: () => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSave: (values: HostUpdateParams) => Promise<any>;
+  onFormSaveError: EditHostFormProps['onFormSaveError'];
 };
 
 const EditHostModal: React.FC<EditHostModalProps> = ({
@@ -20,6 +22,7 @@ const EditHostModal: React.FC<EditHostModalProps> = ({
   usedHostnames,
   onClose,
   onSave,
+  onFormSaveError,
 }) =>
   host && inventory ? (
     <Modal
@@ -36,6 +39,7 @@ const EditHostModal: React.FC<EditHostModalProps> = ({
         usedHostnames={usedHostnames}
         onCancel={onClose}
         onSave={onSave}
+        onFormSaveError={onFormSaveError}
       />
     </Modal>
   ) : null;

@@ -15,3 +15,4 @@ export { default as WizardNavItem } from './WizardNavItem';
 export { default as Alerts } from './Alerts';
 export { default as ExternalLink } from './ExternalLink';
 export { default as PrismCode } from './PrismCode';
+export { default as GridGap } from './GridGap';

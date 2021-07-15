@@ -12,30 +12,26 @@ import {
   AlertActionCloseButton,
 } from '@patternfly/react-core';
 import { Formik } from 'formik';
-import { handleApiError, getErrorMessage } from '../../api/utils';
+import { Host, Inventory } from '../../api';
 import {
-  Host,
-  Inventory,
-  InputField,
   hostnameValidationSchema,
-  uniqueHostnameValidationSchema,
-  canHostnameBeChanged,
+  InputField,
   StaticTextField,
-} from '../../../common';
+  uniqueHostnameValidationSchema,
+} from '../ui';
+import { canHostnameBeChanged } from './utils';
 import GridGap from '../ui/GridGap';
+import { HostUpdateParams } from './types';
 
-export type HostUpdateParams = {
-  hostId: string; // identifier, uuid
-  hostname: string; // requested change
-};
-
-type EditHostFormProps = {
+export type EditHostFormProps = {
   host: Host;
   inventory: Inventory;
   usedHostnames: string[] | undefined;
   onCancel: () => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSave: (values: HostUpdateParams) => Promise<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onFormSaveError: (e: any) => void;
 };
 
 const validationSchema = (initialValues: HostUpdateParams, usedHostnames: string[] = []) =>
@@ -54,6 +50,7 @@ const EditHostForm: React.FC<EditHostFormProps> = ({
   usedHostnames,
   onCancel,
   onSave,
+  onFormSaveError,
 }) => {
   const hostnameInputRef = React.useRef<HTMLInputElement>();
   React.useEffect(() => hostnameInputRef.current?.focus(), []);
@@ -81,14 +78,13 @@ const EditHostForm: React.FC<EditHostFormProps> = ({
           await onSave(values);
           onCancel();
         } catch (e) {
-          handleApiError(e, () =>
-            formikActions.setStatus({
-              error: {
-                title: 'Failed to update host',
-                message: getErrorMessage(e),
-              },
-            }),
-          );
+          const message = onFormSaveError(e);
+          formikActions.setStatus({
+            error: {
+              title: 'Failed to update host',
+              message,
+            },
+          });
         }
       }}
     >
