@@ -26,10 +26,10 @@
     "test:watch": "react-scripts test --env=jsdom",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx --color --fix ./src",
     "prettier": "prettier --write '**/*.{js,jsx,ts,tsx,json,md,scss,yaml,yml}'",
-    "update-api": "curl https://raw.githubusercontent.com/openshift/assisted-service/master/swagger.yaml > src/api/swagger.yaml",
+    "update-api": "curl https://raw.githubusercontent.com/openshift/assisted-service/master/swagger.yaml > src/common/api/swagger.yaml",
     "postupdate-api": "yarn swagger",
-    "swagger": "sw2dts -w -o src/api/types.ts src/api/swagger.yaml",
-    "postswagger": "sed -i -r 's/([a-z1-9]+)_([a-z])/\\1\\U\\2/g' src/api/types.ts && yarn prettier"
+    "swagger": "sw2dts -w -o src/common/api/types.ts src/common/api/swagger.yaml",
+    "postswagger": "sed -i -r 's/([a-z1-9]+)_([a-z])/\\1\\U\\2/g' src/common/api/types.ts && yarn prettier"
   },
   "peerDependencies": {
     "@patternfly/react-code-editor": "^4.1.25",

@@ -1,7 +1,7 @@
 import { K8sResourceCommon } from '@openshift-console/dynamic-plugin-sdk';
-import { Host, HostRole, HostStage, Inventory } from '../../../api/types';
-import { ValidationsInfo } from '../../../types/hosts';
-import { StatusCondition } from './common';
+import { Host, HostRole, HostStage, Inventory } from '../../../common';
+import { ValidationsInfo } from '../../../common/types/hosts';
+import { StatusCondition } from './shared';
 
 export type AgentStatusConditionType =
   | 'SpecSynced'
@@ -23,7 +23,7 @@ export type AgentK8sResource = K8sResourceCommon & {
     hostname: string;
   };
   status?: {
-    conditions: AgentStatusCondition[];
+    conditions?: AgentStatusCondition[];
     hostValidationInfo: ValidationsInfo;
     inventory: Inventory;
     progress: {
