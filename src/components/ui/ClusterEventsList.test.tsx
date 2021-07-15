@@ -1,6 +1,9 @@
 import React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
+import { renderWithRedux } from '../../testUtils';
 import ClusterEventsList, { ClusterEventsListProps } from './ClusterEventsList';
+import { RootState } from '../../store/rootReducer';
+import { ResourceUIState } from '../../types';
 
 // TODO: this fixture needs a warm place where to live in the project.
 const props = Object.freeze<ClusterEventsListProps>({
@@ -173,14 +176,25 @@ const props = Object.freeze<ClusterEventsListProps>({
 
 describe('<ClusterEventsList />', () => {
   it('Renders without crashing', () => {
-    render(<ClusterEventsList {...props} />);
+    const preloadedState: RootState = {
+      clusters: {
+        data: [],
+        uiState: ResourceUIState.LOADED,
+      },
+      currentCluster: {
+        data: { ...props.cluster },
+        uiState: ResourceUIState.LOADED,
+        isReloadScheduled: 0,
+      },
+    };
+    renderWithRedux(<ClusterEventsList {...props} />, { preloadedState });
     const element = screen.queryByPlaceholderText(/Filter by text/i);
     expect(element).toBeTruthy();
   });
 
   describe('Severity filter', () => {
     it("Given that more than one filter is selected, unchecking one item doesn't uncheck the rest", () => {
-      render(<ClusterEventsList {...props} />);
+      renderWithRedux(<ClusterEventsList {...props} />);
 
       // open the severity filter menu
       const severityFilter = screen.getByText(/Severity/i);
@@ -218,7 +232,7 @@ describe('<ClusterEventsList />', () => {
 
   describe('Hosts filter', () => {
     it("Given that 'cluster-level' events and 'deleted hosts' options are selected exclusively; selecting one of the hosts won't activate the 'select all' checkbox", () => {
-      render(<ClusterEventsList {...props} />);
+      renderWithRedux(<ClusterEventsList {...props} />);
 
       // open the hosts filter menu
       const hostsFilter = screen.getByRole('button', { name: /hosts/i });
