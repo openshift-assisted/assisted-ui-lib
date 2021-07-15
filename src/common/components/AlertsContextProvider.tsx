@@ -1,11 +1,12 @@
 import React from 'react';
-import alertsReducer, {
-  AlertProps,
-  addAlert as addAlertAction,
-  removeAlert as removeAlertAction,
-  clearAlerts as clearAlertsAction,
-  AlertPayload,
-} from '../reducers/alertsSlice';
+import { AlertProps, AlertPayload, alertsSlice } from '../reducers';
+
+const {
+  addAlert: addAlertAction,
+  removeAlert: removeAlertAction,
+  clearAlerts: clearAlertsAction,
+} = alertsSlice.actions;
+const alertsReducer = alertsSlice.reducer;
 
 export type AlertsContextType = {
   alerts: AlertProps[];

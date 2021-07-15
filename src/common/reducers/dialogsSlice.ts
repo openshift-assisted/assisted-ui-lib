@@ -5,7 +5,7 @@ export type DialogPayload = {
   data?: unknown;
 };
 
-export const initialState = {};
+const initialState = {};
 
 export const dialogsSlice = createSlice({
   initialState,
@@ -21,6 +21,3 @@ export const dialogsSlice = createSlice({
     },
   },
 });
-
-export const { openDialog, closeDialog } = dialogsSlice.actions;
-export default dialogsSlice.reducer;

@@ -30,6 +30,3 @@ export const alertsSlice = createSlice({
     clearAlerts: () => initialState,
   },
 });
-
-export const { addAlert, removeAlert, clearAlerts } = alertsSlice.actions;
-export default alertsSlice.reducer;

@@ -19,10 +19,12 @@ import {
   getReadyHostCount,
   Alerts,
   AddHostsContext,
+  alertsSlice,
 } from '../../../common';
 import { EventsModalButton } from '../ui/eventsModal';
 import InventoryAddHosts from './InventoryAddHost';
-import { addAlert } from '../../../common/reducers/alertsSlice';
+
+const { addAlert } = alertsSlice.actions;
 
 const AddHosts: React.FC = () => {
   const { cluster } = React.useContext(AddHostsContext);

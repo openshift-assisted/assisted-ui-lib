@@ -10,9 +10,11 @@ import {
   LoadingState,
   fileSize,
   RenderIf,
+  alertsSlice,
 } from '../../../common';
 import { getClusterPreflightRequirements, getErrorMessage, handleApiError } from '../../api';
-import { addAlert } from '../../../common/reducers/alertsSlice';
+
+const { addAlert } = alertsSlice.actions;
 
 export type PreflightHWRequirementsContentComponent = React.FC<{
   clusterId: Cluster['id'];
