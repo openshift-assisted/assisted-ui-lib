@@ -1,2 +1,2 @@
-export * as CIM from './index-cim';
-export * as OCM from './index-ocm';
+export * as CIM from './cim';
+export * as OCM from './ocm';
