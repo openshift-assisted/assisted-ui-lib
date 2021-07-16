@@ -26,7 +26,7 @@ const OCSLabel: React.FC = () => (
       component={'a'}
       variant={'plain'}
       IconComponent={HelpIcon}
-      hasAutoWidth
+      minWidth="50rem"
       headerContent="Additional Requirements"
       bodyContent={<>FOO BAR </>}/>
     */}
@@ -44,7 +44,7 @@ const CNVLabel: React.FC<{ clusterId: Cluster['id']; isSingleNode?: boolean }> =
         component={'a'}
         variant={'plain'}
         IconComponent={HelpIcon}
-        hasAutoWidth
+        minWidth="50rem"
         headerContent="Additional Requirements"
         bodyContent={
           <CNVHostRequirementsContent clusterId={clusterId} isSingleNode={isSingleNode} />
@@ -119,5 +119,4 @@ const HostInventory: React.FC<{ cluster: Cluster }> = ({ cluster }) => {
     </Stack>
   );
 };
-
 export default HostInventory;
